@@ -13,20 +13,5 @@
       "Rabika",
       "Mayo"
     ]
-  },
-  {
-    "id": "reiken-audio",
-    "name": "Reiken Audio Studio",
-    "category": "Diseño de Sonido",
-    "currentVersion": "1.0.0",
-    "downloadUrl": "",
-    "executable": "ReikenAudio.exe",
-    "banner": "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=1280&auto=format&fit=crop",
-    "description": "Estudio integrado para la composición, mezcla de pistas ambientales y sincronización de efectos de audio en tus viñetas de storyboard.",
-    "changelog": [
-      "🚀 Lanzamiento inicial de la versión Beta.",
-      "🔊 Línea de tiempo multipista para efectos de sonido (.wav, .mp3).",
-      "🎵 Panel de transiciones acústicas para cambios de escena."
-    ]
   }
 ]
