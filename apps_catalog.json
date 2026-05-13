@@ -3,15 +3,15 @@
     "id": "reiken-workspace",
     "name": "Reiken Workspace",
     "category": "Producción & Arte",
-    "currentVersion": "1.2.1",
-    "downloadUrl": "https://github.com/rabikasuloa/ReikenWorkspace/releases/download/v1.2.1/workspace.zip",
+    "currentVersion": "1.2.2",
+    "downloadUrl": "https://github.com/rabikasuloa/ReikenWorkspace/releases/download/v1.2.2/workspace.zip",
     "executable": "ReikenWorkspace.exe",
     "banner": "https://res.cloudinary.com/dyy6zbkop/image/upload/v1778266397/znkkaf4m4ss1uquhuxvo.png",
     "description": "Herramienta creada para el desarrollo organizado de proyectos. Especializada en la creacion de Storyboard y Worldbuilding.",
     "changelog": [
-      "Yona",
-      "Rabika",
-      "Mayo"
+      "Todas las funcionalidades pensadas para la seccion de storyboarding han sido implementadas.",
+      "Arreglo de bugs.",
+      "Nadie lee esto jeje."
     ],
     "logo": "https://res.cloudinary.com/dyy6zbkop/image/upload/v1778264919/gvhbbn7lfcy99z3ewwh4.png"
   }
