@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Proyectos - Reiken</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="icons/ReikenIcon.png">
+</head>
+<body class="projects-body">
+<div id="rk-global-loader">
+  <div class="rk-gl-logo">
+    <img src="icons/ReikenIcon.png" alt="Reiken">
+  </div>
+  <h2 class="rk-gl-text" id="rkGlText">Sincronizando Workspace</h2>
+  <p class="rk-gl-subtext" id="rkGlSubtext">Conectando con la base de datos...</p>
+  <div class="rk-gl-spinner"></div>
+</div>
+<div id="rk-bg"></div>
+
+<!-- ══════════════════════════════
+     TOPBAR
+════════════════════════════════ -->
+<header class="index-topbar">
+  <div class="index-topbar-container">
+    <span>REIKEN</span>
+    <div class="index-topbar-logo">
+      <img src="icons/ReikenIcon.png" alt="logo">
+    </div>
+    <span>STUDIOS</span>
+  </div>
+</header>
+
+<!-- ══════════════════════════════
+     LAYOUT PRINCIPAL
+════════════════════════════════ -->
+<div class="projects-layout">
+
+  <!-- ── SIDEBAR ─────────────────────────── -->
+  <aside class="sidebar" id="sidebar">
+
+    <!-- Botón toggle (flecha) -->
+    <button class="sidebar-toggle" id="sidebarToggle" title="Colapsar menú">
+      <img src="icons/iconos/flecha.png" alt="◀" id="sidebarArrowImg"
+           onerror="this.style.display='none'; this.nextElementSibling.style.display='inline'">
+      <span id="sidebarArrowFallback" style="display:none; font-size:18px; color:white;">◀</span>
+    </button>
+
+    <div class="sidebar-content" id="sidebarContent">
+
+      <!-- ── ZONA RECOMENDACIONES (crece y empuja el resto hacia abajo) ── -->
+      <div class="sidebar-recommendations">
+        <p class="sidebar-label">Recomendaciones:</p>
+      </div>
+
+      <!-- ── ZONA INFERIOR: atajos + opciones + perfil ── -->
+      <div class="sidebar-bottom">
+
+        <div class="sidebar-divider"></div>
+
+        <!-- Atajos -->
+        <div class="sidebar-shortcuts" id="shortcutList"></div>
+
+        <!-- Crear atajo -->
+        <button class="sidebar-create-shortcut" id="createShortcutBtn">
+          <span class="sidebar-icon-circle sidebar-circle-add">+</span>
+          <span class="sidebar-item-label">Crear atajo</span>
+        </button>
+
+        <div class="sidebar-divider"></div>
+
+        <!-- Luna AI -->
+        <button class="sidebar-item" id="btnLunaChat">
+          <img src="icons/iconos/Luna.png" alt="" class="sidebar-icon-img"
+               onerror="this.style.display='none'">
+          <span class="sidebar-item-label">Luna</span>
+        </button>
+
+        <!-- Reikanales -->
+        <button class="sidebar-item">
+          <img src="icons/iconos/reikanales.png" alt="" class="sidebar-icon-img"
+               onerror="this.style.display='none'">
+          <span class="sidebar-item-label">Reikanales</span>
+        </button>
+
+        <!-- Notificaciones -->
+        <button class="sidebar-item">
+          <img src="icons/iconos/notificaciones.png" alt="" class="sidebar-icon-img"
+               onerror="this.style.display='none'">
+          <span class="sidebar-item-label">Notificaciones</span>
+        </button>
+
+        <!-- Apariencia -->
+        <button class="sidebar-item" id="appearanceBtn">
+          <img src="https://res.cloudinary.com/dyy6zbkop/image/upload/v1774987409/yawddbmuvgompilk4mar.png" alt="" class="sidebar-icon-img"
+               onerror="this.style.display='none'">
+          <span class="sidebar-item-label">Apariencia</span>
+        </button>
+
+        <!-- Configuración -->
+        <button class="sidebar-item" id="configBtn">
+          <img src="icons/iconos/config.png" alt="" class="sidebar-icon-img"
+               onerror="this.style.display='none'">
+          <span class="sidebar-item-label">Configuracion</span>
+        </button>
+
+        <div class="sidebar-divider"></div>
+
+        <!-- Perfil -->
+        <button class="sidebar-item sidebar-profile" id="profileBtn">
+          <div class="sidebar-avatar">
+            <img id="sidebarAvatarImg" src="icons/Tu.png" alt="perfil">
+          </div>
+          <span class="sidebar-item-label sidebar-alias" id="sidebarAlias">Alias</span>
+        </button>
+
+      </div><!-- fin sidebar-bottom -->
+    </div>
+  </aside>
+
+  <!-- ── CONTENIDO PRINCIPAL ─────────────── -->
+  <main class="projects-main">
+
+    <!-- Cabecera -->
+    <div class="projects-header">
+      <h1 class="projects-title">PROYECTOS</h1>
+      <button class="projects-add-btn" id="openCreateModal" title="Nuevo proyecto">+</button>
+    </div>
+
+    <!-- Lista de proyectos -->
+    <div class="projects-list" id="projectsList">
+      <!-- Estado vacío -->
+      <div class="projects-empty" id="projectsEmpty">
+        <p>Aún no hay proyectos.<br>¡Crea el primero con el botón +!</p>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ══════════════════════════════
+     MODAL · CREAR PROYECTO
+════════════════════════════════ -->
+<div id="createProjectModal" class="modal-overlay hidden">
+  <div class="modal-box">
+
+    <div class="modal-header">
+      <h2>Nuevo Proyecto</h2>
+      <button class="modal-close" id="closeCreateModal">✕</button>
+    </div>
+
+    <!-- Banner del proyecto -->
+    <div class="modal-banner-box" id="modalBannerBox" title="Subir banner">
+      <img id="modalBannerPreview" src="" alt="Banner del proyecto">
+      <span class="modal-banner-hint">Haz clic para subir banner</span>
+    </div>
+    <input type="file" id="modalBannerInput" accept="image/*" hidden>
+
+    <!-- Icono del proyecto -->
+    <div class="modal-row">
+      <div class="modal-icon-box" id="modalIconBox" title="Subir ícono">
+        <img id="modalIconPreview" src="" alt="Ícono">
+        <span class="modal-icon-hint">+</span>
+      </div>
+      <div class="modal-fields">
+        <input id="modalProjectName" type="text" placeholder="Nombre del proyecto" class="modal-input">
+        <textarea id="modalProjectDesc" placeholder="Descripción..." class="modal-textarea" rows="3"></textarea>
+      </div>
+    </div>
+    <input type="file" id="modalIconInput" accept="image/*" hidden>
+
+    <div class="modal-members-row" style="margin-bottom:4px">
+      <button class="button-secondary" id="addMembersCreateBtn" style="width:100%">👥 Añadir miembros</button>
+    </div>
+
+    <div class="modal-footer">
+      <button class="button-secondary" id="cancelCreateModal">Cancelar</button>
+      <button class="button-main modal-save-btn" id="saveProjectBtn">¡HECHO!</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     MODAL · PLACEHOLDER CONFIG
+════════════════════════════════ -->
+
+
+<!-- ══════════════════════════════
+     MODAL · APARIENCIA
+════════════════════════════════ -->
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+<script src="rk_core.js"></script>
+<script src="rk_crop.js"></script>
+<script src="rk_components.js"></script>
+  <script src="rk_tutorial.js"></script>
+<script src="rk_projects.js"></script>
+<script src="reikanales.js"></script>
+</body>
+</html>

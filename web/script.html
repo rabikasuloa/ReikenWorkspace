@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Script - Reiken</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="script_zen_format.css">
+  <link rel="icon" href="icons/ReikenIcon.png">
+</head>
+
+<body class="projects-body format-cine">
+  <div id="rk-bg"></div>
+  
+  <!-- Trigger zone to show header on hover during Zen Mode -->
+  <div class="script-header-trigger" id="scriptHeaderTrigger"></div>
+
+  <!-- ══════════════════════════════
+     LAYOUT
+     ════════════════════════════════ -->
+  <div class="projects-layout">
+
+    <main class="projects-main" style="padding: 0; display: flex; flex-direction: column; width: 100%; height: 100vh;">
+      
+      <!-- Cabecera -->
+      <div class="projects-header script-header" id="scriptHeader">
+        <button class="ip-back-btn" id="backBtn" title="Volver a Storyboard"
+          style="background:transparent; border:none; cursor:pointer;">
+          <img src="icons/iconos/flecha.png" alt="←"
+            onerror="this.style.display='none';this.parentElement.textContent='←'"
+            style="transform:rotate(180deg);width:20px;height:20px;filter:brightness(0) invert(1);">
+        </button>
+        <h1 class="projects-title" id="sceneTitle" style="margin: 0; padding-right: 20px; flex:1;">Cargando...</h1>
+        
+        <!-- Format Selector -->
+        <select id="scriptFormatSelect" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); color: white; padding: 6px 12px; border-radius: 8px; font-size: 12px; cursor: pointer; outline: none;" title="Seleccionar Plantilla de Formato">
+          <option value="cine" selected>🎬 Cine (Fountain)</option>
+          <option value="teatro">🎭 Teatro</option>
+          <option value="comic">🎨 Cómic</option>
+        </select>
+
+        <button class="button-secondary" id="btnZenMode" style="margin-left: 10px; background:rgba(219, 111, 78, 0.1); border: 1px solid rgba(219, 111, 78, 0.3); color:#db6f4e; padding: 6px 12px; border-radius: 8px; font-size:12px; cursor:pointer;" title="Alternar Modo Zen (Ctrl+Alt+Z)">Modo Zen</button>
+        <button class="button-secondary" id="btnTutorialScript" style="margin-left: 10px; background:none; border:none; color:#db6f4e; text-decoration:underline; font-size:12px; cursor:pointer;">Tutorial</button>
+        
+        <!-- Fountain Import/Export -->
+        <div class="fountain-buttons-container">
+          <button class="button-secondary" id="btnImportFountain" style="background:none; border:none; color:#db6f4e; text-decoration:underline; font-size:12px; cursor:pointer;" title="Importar archivo .fountain">Importar</button>
+          <button class="button-secondary" id="btnExportFountain" style="background:none; border:none; color:#db6f4e; text-decoration:underline; font-size:12px; cursor:pointer;" title="Exportar como .fountain">Exportar</button>
+          <input type="file" id="fountainFileInput" accept=".fountain,.txt" hidden>
+        </div>
+
+        <button class="button-main" id="btnAutoPaneles" style="margin-left: 15px; background:rgba(219, 111, 78, 0.15); color:#db6f4e; border: 1px dashed #db6f4e;">Generar Paneles</button>
+        <button class="button-main modal-save-btn" id="saveScriptBtn" style="padding: 8px 16px; margin-left: 15px;">Guardar</button>
+      </div>
+
+      <div class="script-container" id="scriptScrollContainer" style="padding: 20px;">
+        <div class="script-editor" id="scriptEditor" contenteditable="true" spellcheck="false" data-placeholder="Escribe el guion aquí... Usa '/' para personajes" style="width:100%; min-height: 80vh; outline:none; white-space: pre-wrap; word-wrap: break-word;"></div>
+      </div>
+
+      <!-- Menú Flotante de Slash (Personajes) -->
+      <div id="slashMenu" class="slash-menu hidden">
+        <div class="slash-menu-header">Personajes</div>
+        <div id="slashMenuList" class="slash-menu-list"></div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <script src="rk_core.js"></script>
+  <script src="rk_components.js"></script>
+  <script src="rk_tutorial.js"></script>
+  <script src="script.js"></script>
+</body>
+
+</html>

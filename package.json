@@ -1,0 +1,23 @@
+{
+  "name": "reikenworkspace",
+  "version": "1.2.0",
+  "description": "Software de gestión de mundos y proyectos literarios.",
+  "scripts": {
+    "start": "tauri dev",
+    "build": "tauri build",
+    "dev": "tauri dev",
+    "postinstall": "node -e \"require('fs').copyFileSync('node_modules/yjs/dist/yjs.mjs', 'lib/yjs.mjs')\""
+  },
+  "keywords": [],
+  "author": {
+    "name": "Reiken Studios"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "@tauri-apps/api": "^2.11.1",
+    "@tauri-apps/cli": "^2.11.3"
+  },
+  "dependencies": {
+    "yjs": "^13.6.31"
+  }
+}

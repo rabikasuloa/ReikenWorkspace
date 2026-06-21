@@ -1,0 +1,380 @@
+/*
+ * Reiken Workspace — Estilos Premium para Planificador de Episodios
+ * planning.css
+ */
+
+body.rk-dark-theme {
+  background: radial-gradient(circle at 50% 50%, #1a1525 0%, #0e0a15 100%);
+  color: #f5f5f7;
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Contenedor Principal */
+.planning-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  box-sizing: border-box;
+}
+
+/* Cabecera */
+.planning-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 28px;
+  background: rgba(14, 10, 21, 0.7);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  flex-shrink: 0;
+  z-index: 100;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.btn-back {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.btn-back:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateX(-2px);
+}
+
+.season-info-header h1 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.35rem;
+  margin: 0;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: -0.01em;
+}
+
+.season-desc {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 2px 0 0 0;
+}
+
+.header-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-action {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 600;
+  font-size: 0.85rem;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-add {
+  background: #db6f4e;
+  border: none;
+  color: #fff;
+}
+
+.btn-add:hover {
+  background: #e68263;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(219, 111, 78, 0.3);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* Área del Lienzo de Rejilla */
+.planning-canvas {
+  flex: 1;
+  overflow: auto;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+/* Rejilla/Tabla de Tramas */
+.plot-grid {
+  border-collapse: separate;
+  border-spacing: 12px; /* Espacio premium entre celdas */
+  width: max-content;
+  min-width: 100%;
+}
+
+/* Celdas de Cabecera */
+.plot-grid th {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 600;
+  text-align: center;
+  padding: 14px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.95rem;
+}
+
+/* Esquina */
+.corner-header {
+  position: sticky;
+  left: 0;
+  z-index: 10;
+  background: #14101b !important;
+  min-width: 200px;
+  max-width: 200px;
+}
+
+/* Cabecera de Episodio */
+.episode-header {
+  min-width: 240px;
+  max-width: 280px;
+  position: relative;
+  cursor: pointer;
+  transition: border-color 0.25s, background 0.25s;
+}
+
+.episode-header:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.episode-header-desc {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.4);
+  margin-top: 4px;
+}
+
+/* Fila de Trama */
+.plot-grid tbody th.plotline-header {
+  position: sticky;
+  left: 0;
+  z-index: 9;
+  background: #14101b;
+  min-width: 200px;
+  max-width: 200px;
+  text-align: left;
+  padding: 16px;
+  border-radius: 8px;
+  border-left: 5px solid var(--trama-color, #db6f4e);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.plot-grid tbody th.plotline-header:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.plotline-title {
+  display: block;
+  font-size: 0.9rem;
+  color: #fff;
+  font-weight: 600;
+}
+
+.plotline-meta {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.45);
+  font-weight: 400;
+  margin-top: 3px;
+}
+
+/* Celdas de Soltado / Drop Targets */
+.grid-cell {
+  background: rgba(255, 255, 255, 0.015);
+  border: 1px dashed rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 10px;
+  min-width: 240px;
+  max-width: 280px;
+  min-height: 120px;
+  vertical-align: top;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.grid-cell.drag-over {
+  background: rgba(219, 111, 78, 0.08);
+  border: 1.5px dashed #db6f4e;
+  box-shadow: inset 0 0 10px rgba(219, 111, 78, 0.15);
+}
+
+/* Tarjetas de Trama / Plot Cards */
+.plot-card {
+  background: rgba(255, 255, 255, 0.045);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-left: 4px solid var(--card-color, #db6f4e);
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 8px;
+  cursor: grab;
+  user-select: none;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+  position: relative;
+}
+
+.plot-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.plot-card:active {
+  cursor: grabbing;
+}
+
+.plot-card-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fff;
+  margin: 0 0 6px 0;
+  line-height: 1.3;
+}
+
+.plot-card-summary {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0 0 10px 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.4;
+}
+
+.plot-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Indicador de tensión */
+.tension-indicator {
+  display: flex;
+  gap: 2px;
+}
+
+.tension-dot-visual {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.tension-dot-visual.active {
+  background: #db6f4e;
+}
+
+/* Personajes Vinculados */
+.card-characters {
+  display: flex;
+  gap: -4px; /* Solapamiento de burbujas */
+  margin-left: auto;
+}
+
+.char-bubble {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--char-bg, #9b5de5);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #14101b;
+  text-transform: uppercase;
+}
+
+/* Multiselector de personajes en Modal */
+.character-selector-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 8px;
+  max-height: 150px;
+  overflow-y: auto;
+  padding: 8px;
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.char-select-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 6px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  user-select: none;
+  font-size: 0.75rem;
+  transition: background 0.15s;
+}
+
+.char-select-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.char-select-item input {
+  margin: 0;
+  cursor: pointer;
+}
+
+.char-select-avatar {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--char-color, #9b5de5);
+  font-size: 0.6rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+/* Indicadores de Tensión en Edición */
+.tension-dot.active {
+  transform: scale(1.2);
+  box-shadow: 0 0 10px rgba(255,255,255,0.25);
+}
+
+/* Paleta de Colores en Modal */
+.color-swatch.active {
+  border-color: #fff !important;
+  transform: scale(1.1);
+}

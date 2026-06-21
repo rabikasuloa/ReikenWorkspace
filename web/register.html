@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro - Reiken</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="icons/ReikenIcon.png" type="img">
+</head>
+<body>
+
+<header class="index-topbar">
+  <div class="index-topbar-container">
+    <span>REIKEN</span>
+    <div class="index-topbar-logo">
+        <img src="icons/ReikenIcon.png" alt="logo">
+      </div>
+    <span>STUDIOS</span>
+  </div>
+</header>
+
+<main class="index-background">
+
+  <section class="register-card">
+
+    <div class="register-card-header">
+      <img src="icons/ReikenIcon.png" alt="logo">
+      <h2>REGISTRO</h2>
+    </div>
+
+    <form class="register-form">
+
+      <label>Nombre de usuario</label>
+      <input type="text">
+
+      <label>Correo electrónico</label>
+      <input type="email">
+
+      <label>Contraseña</label>
+      <input type="password">
+
+      <label>Confirmar contraseña</label>
+      <input type="password">
+
+      <button type="submit" class="button-register">¡HECHO!</button>
+
+      <p class="auth-switch">¿Ya tienes cuenta? <a href="login.html">Inicia sesión</a></p>
+
+    </form>
+
+  </section>
+
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+<script src="rk_core.js"></script>
+<script src="rk_auth.js"></script>
+</body>
+</html>

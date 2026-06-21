@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personalización - Reiken</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="icons/ReikenIcon.png">
+</head>
+<body>
+
+<header class="index-topbar">
+  <div class="index-topbar-container">
+    <span>REIKEN</span>
+    <div class="index-topbar-logo">
+      <img src="icons/ReikenIcon.png" alt="logo">
+    </div>
+    <span>STUDIOS</span>
+  </div>
+</header>
+
+<main class="index-background">
+
+  <section class="personalization-container">
+
+    <!-- ══════════════════════
+         COLUMNA 1 · TÚ, EN REIKEN
+    ══════════════════════════ -->
+    <div class="personalization-card">
+
+      <h2>TÚ, EN REIKEN</h2>
+
+      <!-- Avatar grande (clickeable para crop) -->
+      <div class="profile-box" title="Cambiar avatar">
+        <img id="avatarPreview" src="icons/TuenReiken.png" alt="Tu avatar en Reiken">
+      </div>
+      <input type="file" id="avatarInput" hidden accept="image/*">
+
+      <!-- Rol Principal -->
+      <div class="dropdown-wrapper">
+        <button id="rolPrincipalBtn" class="dropdown-btn">Rol Principal ▼</button>
+        <div id="rolPrincipalDropdown" class="dropdown-menu hidden"></div>
+      </div>
+      <div id="rolesPrincipalContainer" class="role-box"></div>
+
+      <!-- Roles Secundarios -->
+      <div class="dropdown-wrapper">
+        <button id="rolSecundarioBtn" class="dropdown-btn">Roles Secundarios ▼</button>
+        <div id="rolSecundarioDropdown" class="dropdown-menu hidden"></div>
+      </div>
+      <div id="rolesSecundariosContainer" class="role-box grid"></div>
+
+      <div class="button-group">
+        <button id="saveRoles" class="button-main">Actualizar</button>
+      </div>
+
+    </div>
+
+
+    <!-- ══════════════════════
+         COLUMNA 2 · TÚ
+    ══════════════════════════ -->
+    <div class="personalization-card">
+
+      <h2>TÚ</h2>
+
+      <!-- Banner (clickeable) -->
+      <div class="banner-box" title="Cambiar banner">
+        <img id="bannerPreview" src="icons/Tu.png" alt="Banner">
+      </div>
+      <input type="file" id="bannerInput" hidden accept="image/*">
+
+      <!-- Foto de perfil (circular, clickeable) -->
+      <div class="profile-photo" title="Cambiar foto de perfil">
+        <img id="profilePreview" src="icons/Tu.png" alt="Foto de perfil">
+      </div>
+      <input type="file" id="profileUpload" hidden accept="image/*">
+
+      <label>Alias</label>
+      <input id="aliasInput" type="text" placeholder="Tu alias...">
+
+      <!-- COLOR DE ALIAS -->
+      <label>Color de Alias</label>
+      <div class="color-picker-wrapper">
+        <!-- Rueda de color nativa (oculta visualmente, activada por el swatch) -->
+        <input id="colorWheel" type="color" value="#ffffff">
+        <!-- Swatch clickeable -->
+        <div id="colorSwatch" class="color-swatch" title="Abrir selector de color"></div>
+        <!-- Hex manual -->
+        <input id="colorInput" type="text" placeholder="#ffffff" maxlength="7" spellcheck="false">
+      </div>
+
+      <!-- FUENTE DE ALIAS -->
+      <label>Fuente de Alias</label>
+      <div class="font-upload-wrapper">
+        <button id="fontUploadBtn" class="font-upload-btn">Subir fuente (.woff2)</button>
+        <input id="fontFileInput" type="file" accept=".woff2" hidden>
+        <span id="fontFileName" class="font-file-name">Sin fuente cargada</span>
+      </div>
+
+      <!-- PREVIEW DEL ALIAS -->
+      <div class="alias-preview-box">
+        <span id="aliasPreview">Tu alias</span>
+      </div>
+
+      <div class="button-group">
+        <button id="saveProfile" class="button-main">Actualizar</button>
+        <button id="finishBtn" class="button-finish">¡HECHO!</button>
+      </div>
+
+    </div>
+
+
+    <!-- ══════════════════════
+         COLUMNA 3 · TÚ, EN EL EQUIPO
+    ══════════════════════════ -->
+    <div class="personalization-card">
+
+      <h2>TÚ, EN EL EQUIPO</h2>
+
+      <div class="team-box">
+        <img src="icons/TuenEquipo.png" alt="Tu en el equipo">
+      </div>
+
+      <h3>Disponibilidad Semanal</h3>
+
+      <div class="days">
+        <span data-day="Lu">Lu</span>
+        <span data-day="Ma">Ma</span>
+        <span data-day="Mi">Mi</span>
+        <span data-day="Ju">Ju</span>
+        <span data-day="Vi">Vi</span>
+        <span data-day="Sa">Sa</span>
+        <span data-day="Do">Do</span>
+      </div>
+
+      <h3>Horarios</h3>
+
+      <div class="schedule">
+        <select id="daySelect">
+          <option value="Lu">Lu</option>
+          <option value="Ma">Ma</option>
+          <option value="Mi">Mi</option>
+          <option value="Ju">Ju</option>
+          <option value="Vi">Vi</option>
+          <option value="Sa">Sa</option>
+          <option value="Do">Do</option>
+        </select>
+        <input id="startTime" type="time">
+        <span>-</span>
+        <input id="endTime" type="time">
+      </div>
+
+      <div class="button-group">
+        <button id="saveDisponibilidad" class="button-main">Actualizar</button>
+      </div>
+
+    </div>
+
+  </section>
+
+</main>
+
+<!-- Supabase primero, luego app.js -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+<script src="rk_core.js"></script>
+<script src="rk_crop.js"></script>
+<script src="rk_personalization.js"></script>
+
+</body>
+</html>

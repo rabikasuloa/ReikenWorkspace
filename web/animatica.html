@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reiken Workspace - Animática</title>
+  <link rel="icon" href="icons/ReikenIcon.png" type="image/png">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="animatica.css">
+</head>
+<body>
+
+  <!-- BACKGROUND DE REIKEN -->
+  <div id="rk-bg" style="position:fixed; inset:0; z-index:-1; transition: background-image 0.5s ease;"></div>
+
+  <!-- SIDEBAR GLOBAL DE REIKEN -->
+  <aside class="sidebar" id="sidebar">
+    <button class="sidebar-toggle" id="sidebarToggle" title="Colapsar menú">
+      <img src="icons/iconos/flecha.png" alt="◀" id="sidebarArrowImg"
+        onerror="this.style.display='none'; this.nextElementSibling.style.display='inline'">
+      <span id="sidebarArrowFallback" style="display:none; font-size:18px; color:white;">◀</span>
+    </button>
+
+    <div class="sidebar-content" id="sidebarContent">
+      <div class="sidebar-recommendations">
+        <p class="sidebar-label">Recomendaciones:</p>
+      </div>
+
+      <div class="sidebar-bottom">
+        <div class="sidebar-divider"></div>
+
+        <div class="sidebar-shortcuts" id="shortcutList"></div>
+        <button class="sidebar-create-shortcut" id="createShortcutBtn">
+          <span class="sidebar-icon-circle sidebar-circle-add">+</span>
+          <span class="sidebar-item-label">Crear atajo</span>
+        </button>
+
+        <div class="sidebar-divider"></div>
+
+        <button class="sidebar-item" id="btnReikanales">
+          <img src="icons/iconos/reikanales.png" alt="" class="sidebar-icon-img" onerror="this.style.display='none'">
+          <span class="sidebar-item-label">Reikanales</span>
+        </button>
+        <button class="sidebar-item" id="btnNotificaciones">
+          <img src="icons/iconos/notificaciones.png" alt="" class="sidebar-icon-img" onerror="this.style.display='none'">
+          <span class="sidebar-item-label">Notificaciones</span>
+        </button>
+        <button class="sidebar-item" id="appearanceBtn">
+          <img src="https://res.cloudinary.com/dyy6zbkop/image/upload/v1774987409/yawddbmuvgompilk4mar.png" alt=""
+            class="sidebar-icon-img" onerror="this.style.display='none'">
+          <span class="sidebar-item-label">Apariencia</span>
+        </button>
+        <button class="sidebar-item" id="configBtn">
+          <img src="icons/iconos/config.png" alt="" class="sidebar-icon-img" onerror="this.style.display='none'">
+          <span class="sidebar-item-label">Configuracion</span>
+        </button>
+
+        <div class="sidebar-divider"></div>
+
+        <button class="sidebar-item sidebar-profile" id="profileBtn">
+          <div class="sidebar-avatar">
+            <img id="sidebarAvatarImg" src="icons/Tu.png" alt="perfil">
+          </div>
+          <span class="sidebar-item-label sidebar-alias" id="sidebarAlias">Alias</span>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- CONTENEDOR PRINCIPAL -->
+  <div class="main-wrapper">
+    
+    <!-- CABECERA -->
+    <header class="animatica-header">
+      <div class="header-left">
+        <button class="back-btn" id="backBtn" title="Volver a la Escena">
+          <img src="icons/iconos/flecha.png" alt="←" style="transform: rotate(180deg);">
+        </button>
+        <h1 class="scene-title" id="animaticTitle">Animática - Cargando Escena...</h1>
+      </div>
+      
+      <div class="header-actions">
+        <!-- Indicador de guardado automático -->
+        <div class="autosave-indicator" id="saveIndicator">
+          <span class="dot"></span>
+          <span id="saveIndicatorText">Sincronizado</span>
+        </div>
+        <button class="btn-save" id="btnSaveNow" title="Guardar cambios de forma manual">Guardar Ahora</button>
+      </div>
+    </header>
+
+    <!-- DIVISION DEL AREA DE TRABAJO -->
+    <div class="workspace-split">
+      
+      <!-- PARTE SUPERIOR (VISOR Y CONFIGURACIONES) -->
+      <section class="workspace-top">
+        
+        <!-- VISOR DEL REPRODUCTOR -->
+        <div class="player-container">
+          <div class="player-viewport" id="playerViewport">
+            <!-- Imagen del fotograma actual -->
+            <img id="playerFrameImg" class="player-frame-img" src="" alt="Frame" style="display:none;">
+            <!-- Placeholder vacío -->
+            <div id="playerEmpty" class="player-no-panel">No hay paneles en la escena</div>
+            <!-- Subtítulos / Diálogos en escena -->
+            <div id="subtitleOverlay" class="player-subtitle-overlay"></div>
+          </div>
+          
+          <!-- CONTROLES DEL REPRODUCTOR -->
+          <div class="player-controls">
+            <button class="control-btn" id="btnPlayPause" title="Reproducir/Pausar (Espacio)">▶</button>
+            <button class="control-btn" id="btnStop" title="Detener">■</button>
+            <button class="control-btn" id="btnLoop" title="Repetir reproducción">🔁</button>
+            <button class="control-btn" id="btnMute" title="Silenciar audios">🔊</button>
+            <span class="time-display" id="timeDisplay">00:00.0 / 00:00.0</span>
+          </div>
+        </div>
+
+        <!-- PANEL DE AJUSTES LATERAL (PROPIEDADES) -->
+        <div class="properties-container">
+          <h2 class="prop-section-title">Ajustes del Panel Seleccionado</h2>
+          
+          <!-- Contenido dinámico al seleccionar panel -->
+          <div id="panelConfigArea" class="panel-config-card" style="display:none;">
+            <h3 id="selectedPanelLabel" style="font-family:'Gliker'; font-size:14px; margin-top:0; color:#fff;">Panel #1</h3>
+            
+            <!-- Duración manual -->
+            <div class="form-group">
+              <label>Duración del Panel (segundos)</label>
+              <input type="number" id="panelDurInput" class="modal-input" step="0.1" min="0.1" style="width:100%; box-sizing:border-box;">
+            </div>
+
+            <!-- Movimiento de Cámara (Ken Burns) -->
+            <div class="prop-section-title" style="font-size: 13px; margin-top:20px;">Movimiento de Cámara (Paneo/Zoom)</div>
+            
+            <div class="toggle-container">
+              <span style="font-size:12px; color:var(--text-muted);">Activar Cámara Dinámica</span>
+              <label class="toggle-switch">
+                <input type="checkbox" id="camEnabledToggle">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+
+            <div id="cameraControlsArea" style="opacity: 0.5; pointer-events: none; transition: opacity 0.2s;">
+              
+              <!-- FOTOGRAMA DE INICIO -->
+              <div class="prop-section-title" style="font-size:11px; margin-top:10px; border-bottom:none; padding-bottom:0; color:#fff;">Encuadre de Inicio (Start Frame)</div>
+              
+              <div class="form-group">
+                <label>Zoom (Inicio)</label>
+                <div class="slider-container">
+                  <input type="range" id="camStartZoom" min="1" max="3" step="0.05" value="1">
+                  <span class="slider-val" id="camStartZoomVal">1.0x</span>
+                </div>
+              </div>
+              
+              <div class="form-group-row">
+                <div class="form-group">
+                  <label>Desplazar X (Inicio)</label>
+                  <div class="slider-container">
+                    <input type="range" id="camStartX" min="-50" max="50" step="1" value="0">
+                    <span class="slider-val" id="camStartXVal">0%</span>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Desplazar Y (Inicio)</label>
+                  <div class="slider-container">
+                    <input type="range" id="camStartY" min="-50" max="50" step="1" value="0">
+                    <span class="slider-val" id="camStartYVal">0%</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- FOTOGRAMA DE FIN -->
+              <div class="prop-section-title" style="font-size:11px; margin-top:15px; border-bottom:none; padding-bottom:0; color:#fff;">Encuadre de Fin (End Frame)</div>
+              
+              <div class="form-group">
+                <label>Zoom (Fin)</label>
+                <div class="slider-container">
+                  <input type="range" id="camEndZoom" min="1" max="3" step="0.05" value="1.2">
+                  <span class="slider-val" id="camEndZoomVal">1.2x</span>
+                </div>
+              </div>
+              
+              <div class="form-group-row">
+                <div class="form-group">
+                  <label>Desplazar X (Fin)</label>
+                  <div class="slider-container">
+                    <input type="range" id="camEndX" min="-50" max="50" step="1" value="0">
+                    <span class="slider-val" id="camEndXVal">0%</span>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Desplazar Y (Fin)</label>
+                  <div class="slider-container">
+                    <input type="range" id="camEndY" min="-50" max="50" step="1" value="0">
+                    <span class="slider-val" id="camEndYVal">0%</span>
+                  </div>
+                </div>
+              </div>
+
+              <button class="btn-save" id="btnTestCamera" style="width:100%; font-size:12px; background:rgba(255,255,255,0.05); border:1px solid var(--border-color); margin-top:5px;">Previsualizar Cámara en Panel</button>
+            </div>
+
+            <!-- AUDIO / EFECTO DE SONIDO (SFX) -->
+            <div class="prop-section-title" style="font-size: 13px; margin-top:25px;">Efecto de Sonido (SFX)</div>
+            
+            <div class="form-group">
+              <label>Cargar Archivo de Sonido</label>
+              <div class="btn-upload-file" id="btnUploadSFX">Subir SFX (.mp3, .wav)</div>
+              <input type="file" id="sfxFileInput" accept="audio/*" style="display:none;">
+              <p id="sfxFileHint" style="font-size:11px; margin:4px 0 0 0; color:var(--text-muted); text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">Ninguno</p>
+            </div>
+
+            <div class="form-group-row" id="sfxProperties" style="display:none;">
+              <div class="form-group">
+                <label>Volumen SFX</label>
+                <div class="slider-container">
+                  <input type="range" id="sfxVolume" min="0" max="1" step="0.05" value="0.8">
+                  <span class="slider-val" id="sfxVolumeVal">80%</span>
+                </div>
+              </div>
+              <button class="btn-save" id="btnDeleteSFX" style="background:#b03030; align-self:flex-end; font-size:11px; height:34px; margin-bottom:15px;">Borrar SFX</button>
+            </div>
+
+            <!-- AUDIO / VOICE OVER -->
+            <div class="prop-section-title" style="font-size: 13px; margin-top:20px;">Voz en Off (Voice Over)</div>
+            
+            <div class="form-group">
+              <label>Cargar Archivo de Voz</label>
+              <div class="btn-upload-file" id="btnUploadVO">Subir Voz en Off</div>
+              <input type="file" id="voFileInput" accept="audio/*" style="display:none;">
+              <p id="voFileHint" style="font-size:11px; margin:4px 0 0 0; color:var(--text-muted); text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">Ninguno</p>
+            </div>
+            
+            <button class="btn-save" id="btnDeleteVO" style="background:#b03030; font-size:11px; width:100%; display:none;">Borrar Voz en Off</button>
+
+          </div>
+
+          <!-- Contenido dinámico al seleccionar audio -->
+          <div id="audioConfigArea" class="panel-config-card" style="display:none;">
+            <h3 id="selectedAudioLabel" style="font-family:'Gliker'; font-size:14px; margin-top:0; color:#fff; word-break:break-all;">Audio Seleccionado</h3>
+            
+            <div class="form-group">
+              <label>Nombre del Clip</label>
+              <input type="text" id="audioNameInput" class="modal-input" style="width:100%; box-sizing:border-box;">
+            </div>
+
+            <div class="form-group-row">
+              <div class="form-group">
+                <label>Tiempo de Inicio (s)</label>
+                <input type="number" id="audioStartInput" class="modal-input" step="0.1" min="0" style="width:100%; box-sizing:border-box;">
+              </div>
+              <div class="form-group">
+                <label>Duración (s)</label>
+                <input type="number" id="audioDurationInput" class="modal-input" step="0.1" min="0.1" style="width:100%; box-sizing:border-box;">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Volumen</label>
+              <div class="slider-container">
+                <input type="range" id="audioVolumeSlider" min="0" max="1" step="0.05" value="1">
+                <span class="slider-val" id="audioVolumeVal">100%</span>
+              </div>
+            </div>
+
+            <div class="form-group-row">
+              <div class="form-group">
+                <label>Fila de Superposición</label>
+                <select id="audioRowSelect" class="modal-input" style="width:100%; box-sizing:border-box; background:#3b133b; color:#fff; border:1px solid var(--border-color); height:34px; border-radius:8px; padding:0 8px;">
+                  <option value="0">Fila 1</option>
+                  <option value="1">Fila 2</option>
+                  <option value="2">Fila 3</option>
+                  <option value="3">Fila 4</option>
+                </select>
+              </div>
+              <div class="form-group" style="display:flex; flex-direction:column; justify-content:center; padding-left:10px;">
+                <label class="toggle-container" style="margin-bottom:0; justify-content:flex-start; gap:10px;">
+                  <span style="font-size:12px; color:var(--text-muted);">Bucle (Loop)</span>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="audioLoopToggle">
+                    <span class="toggle-slider"></span>
+                  </label>
+                </label>
+              </div>
+            </div>
+
+            <button class="btn-save" id="btnDeleteAudioClip" style="background:#b03030; width:100%; font-size:12px; margin-top:10px;">Eliminar Clip de Audio</button>
+          </div>
+          
+          <div id="panelConfigEmpty" class="panel-config-empty">
+            Haz clic en un panel o clip de audio para configurarlo.
+          </div>
+        </div>
+
+      </section>
+
+      <!-- PARTE INFERIOR (LÍNEA DE TIEMPO) -->
+      <section class="workspace-bottom">
+        
+        <!-- Barra de herramientas de la Línea de Tiempo -->
+        <div class="timeline-toolbar">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <span class="timeline-title">LÍNEA DE TIEMPO</span>
+            <button class="btn-add-clip" id="btnAddVoClip" title="Subir clip de voz en off">🎙️ + Voz</button>
+            <button class="btn-add-clip" id="btnAddSfxClip" title="Subir clip de efecto de sonido">💥 + SFX</button>
+            <button class="btn-add-clip" id="btnAddGeneralClip" title="Subir clip de banda sonora">🎵 + Banda Sonora</button>
+            <!-- Inputs ocultos para subida desde la toolbar (separados de los del panel) -->
+            <input type="file" id="voFileInputTimeline" accept="audio/*" style="display:none;">
+            <input type="file" id="sfxFileInputTimeline" accept="audio/*" style="display:none;">
+            <input type="file" id="generalFileInputTimeline" accept="audio/*" style="display:none;">
+          </div>
+          
+          <div class="timeline-settings">
+            <span id="sceneTotalTimeLabel">Duración Total: 0.0s</span>
+          </div>
+        </div>
+
+        <!-- Área de Línea de Tiempo Desplazable -->
+        <div class="timeline-scroll-area" id="timelineScrollArea">
+          
+          <!-- Regla de Tiempo notches -->
+          <div class="time-ruler" id="timeRuler">
+            <!-- Marcadores de segundo insertados por JS -->
+          </div>
+
+          <!-- Contenedor de Pistas -->
+          <div class="tracks-container" id="tracksContainer">
+            
+            <!-- Cabezal de reproducción rojo -->
+            <div class="playhead" id="playhead">
+              <div class="playhead-handle" id="playheadHandle"></div>
+            </div>
+
+            <!-- PISTA 1: VIÑETAS (PANELS) -->
+            <div class="track-row panels-track" id="panelsTrack">
+              <!-- Bloques de paneles se cargan aquí por JS -->
+            </div>
+
+            <!-- PISTA 2: VOZ EN OFF (VOICEOVER) -->
+            <div class="track-row vo-track" id="voTrack">
+              <!-- Bloques de voz en off correspondientes por JS -->
+            </div>
+
+            <!-- PISTA 3: EFECTOS DE SONIDO (SFX) -->
+            <div class="track-row sfx-track" id="sfxTrack">
+              <!-- Bloques de efectos de sonido correspondientes por JS -->
+            </div>
+
+            <!-- PISTA 4: PISTA DE AUDIO GENERAL (SOUNDTRACK) -->
+            <div class="track-row general-track" id="generalTrack"></div>
+
+          </div>
+        </div>
+
+        <!-- Control de Banda Sonora en el extremo izquierdo inferior flotante (Oculto, reemplazado por atajos de línea de tiempo) -->
+        <div style="display:none; padding: 10px; gap:10px; align-items:center; border-top:1px solid rgba(255,255,255,0.05); background:#180a2b;">
+          <span style="font-size:11px; color:var(--text-muted);">Banda Sonora de la Escena:</span>
+          <button class="btn-save" id="btnUploadSceneAudio" style="font-size:11px; padding:4px 8px; background:rgba(255,255,255,0.05); border:1px solid var(--border-color);">Subir Audio</button>
+          <input type="file" id="sceneAudioFileInput" accept="audio/*" style="display:none;">
+          <span id="sceneAudioFileHint" style="font-size:11px; color:var(--text-muted); text-overflow:ellipsis; overflow:hidden; white-space:nowrap; max-width:200px;">Sin audio general</span>
+          <button class="btn-save" id="btnDeleteSceneAudio" style="background:#b03030; font-size:11px; padding:4px 8px; display:none;">Eliminar</button>
+        </div>
+
+      </section>
+
+    </div>
+  </div>
+
+  <!-- SCRIPTS Y DEPENDENCIAS -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <script src="rk_core.js"></script>
+  <script src="rk_components.js"></script>
+  <script src="animatica.js"></script>
+  <script src="reikanales.js"></script>
+</body>
+</html>

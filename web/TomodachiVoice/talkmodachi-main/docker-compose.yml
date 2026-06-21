@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: ./api
+    ports:
+      - "80:5000"
+    restart: "unless-stopped"
+    volumes:
+      - ./US_patched.cxi:/opt/US.cxi
+      - ./EU_patched.cxi:/opt/EU.cxi
+      - ./KR_patched.cxi:/opt/KR.cxi
+      - ./JP_patched.cxi:/opt/JP.cxi

@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Luna Voice Engine v4 — Formant Synthesis</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #0a0a0f; color: white; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; padding: 30px; }
+    .container { width: 620px; }
+    h1 { color: #db6f4e; font-size: 22px; margin-bottom: 6px; }
+    .subtitle { color: rgba(255,255,255,0.4); font-size: 12px; margin-bottom: 24px; }
+    .section { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 18px; margin-bottom: 16px; }
+    .section h2 { color: #db6f4e; font-size: 14px; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 1px; }
+    .slider-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .slider-row label { width: 100px; font-size: 12px; color: rgba(255,255,255,0.5); text-align: right; flex-shrink: 0; }
+    .slider-row input[type="range"] { flex-grow: 1; height: 4px; -webkit-appearance: none; background: rgba(255,255,255,0.1); border-radius: 4px; outline: none; }
+    .slider-row input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; background: #db6f4e; border-radius: 50%; cursor: pointer; }
+    .slider-row .val { width: 40px; font-size: 11px; color: #db6f4e; text-align: center; font-weight: bold; }
+    .tone-row { display: flex; gap: 6px; margin-top: 8px; }
+    .tone-btn { flex: 1; padding: 8px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.5); border-radius: 6px; cursor: pointer; font-size: 11px; text-align: center; transition: all 0.2s; }
+    .tone-btn.active { border-color: #db6f4e; color: #db6f4e; background: rgba(219,111,78,0.15); }
+    .tone-btn:hover { border-color: #db6f4e; }
+    textarea { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: white; font-size: 14px; padding: 12px; resize: vertical; min-height: 60px; outline: none; font-family: inherit; }
+    textarea:focus { border-color: #db6f4e; }
+    .btn-row { display: flex; gap: 8px; margin-top: 12px; }
+    .btn { flex: 1; padding: 12px; border: none; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; transition: all 0.2s; }
+    .btn-primary { background: #db6f4e; color: white; }
+    .btn-primary:hover { background: #f17e5d; transform: scale(1.02); }
+    .btn-stop { background: rgba(255,100,100,0.15); color: #ff6b6b; border: 1px solid rgba(255,100,100,0.3); }
+    .btn-stop:hover { background: rgba(255,100,100,0.3); }
+    #output { min-height: 80px; padding: 16px; background: rgba(10,10,15,0.9); border: 2px solid #db6f4e; border-radius: 10px; font-size: 18px; line-height: 1.5; letter-spacing: 0.5px; margin-top: 16px; }
+    #output span { display: inline-block; }
+    .status { margin-top: 8px; font-size: 11px; color: rgba(255,255,255,0.3); }
+    .note { background: rgba(219,111,78,0.1); border-left: 3px solid #db6f4e; padding: 10px 14px; font-size: 12px; color: rgba(255,255,255,0.6); border-radius: 0 6px 6px 0; margin-bottom: 16px; line-height: 1.5; }
+    @keyframes letterPop {
+      0% { transform: scale(0) translateY(5px); opacity: 0; }
+      60% { transform: scale(1.2) translateY(-2px); opacity: 1; }
+      100% { transform: scale(1) translateY(0); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>🌙 Luna Voice Engine v4</h1>
+  <p class="subtitle">Formant Synthesis — Glottal source + resonant filters = vowels that actually sound like vowels</p>
+
+  <div class="note">
+    <strong>Arquitectura real de voz:</strong> Una onda "buzz" (cuerdas vocales simuladas) pasa por 
+    3 filtros resonantes (F1, F2, F3) que moldean cada vocal. Las consonantes usan ruido blanco 
+    filtrado. Esto es cómo funciona la voz humana real, simplificada.
+  </div>
+
+  <div class="section">
+    <h2>🎙️ Parámetros</h2>
+    <div class="slider-row"><label>Velocidad</label><input type="range" id="slSpeed" min="4" max="22" step="1" value="12"><span class="val" id="vSpeed">12</span></div>
+    <div class="slider-row"><label>Pitch (F0)</label><input type="range" id="slPitch" min="80" max="400" step="5" value="240"><span class="val" id="vPitch">240</span></div>
+    <div class="slider-row"><label>Formant Shift</label><input type="range" id="slFormant" min="80" max="160" step="1" value="120"><span class="val" id="vFormant">120%</span></div>
+    <div class="slider-row"><label>Breathiness</label><input type="range" id="slBreath" min="0" max="100" step="1" value="35"><span class="val" id="vBreath">35</span></div>
+    <div class="slider-row"><label>Profundidad</label><input type="range" id="slDepth" min="0" max="100" step="1" value="20"><span class="val" id="vDepth">20</span></div>
+    <div class="slider-row"><label>Entonación</label><input type="range" id="slInton" min="0" max="100" step="1" value="55"><span class="val" id="vInton">55</span></div>
+    <div class="slider-row">
+      <label>Estilo Entonación</label>
+      <select id="selIntonStyle" style="flex-grow:1; background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.15); color:white; border-radius:4px; padding:4px; outline:none; font-family:inherit; font-size:12px; cursor:pointer;">
+        <option value="expressive" style="background:#1e1e24; color:white;">Expresiva (Estándar)</option>
+        <option value="flat" style="background:#1e1e24; color:white;">Plana (Robótica)</option>
+        <option value="melodious" style="background:#1e1e24; color:white;">Melódica (Cantarina)</option>
+        <option value="shy" style="background:#1e1e24; color:white;">Tímida (Descendente)</option>
+        <option value="serious" style="background:#1e1e24; color:white;">Seria / Neutra</option>
+      </select>
+    </div>
+    <div class="slider-row"><label>Volumen</label><input type="range" id="slVol" min="0" max="200" step="1" value="100"><span class="val" id="vVol">100</span></div>
+    <div class="slider-row" style="align-items: center; justify-content: flex-start; gap: 8px; margin-top: 6px;">
+      <input type="checkbox" id="chkRetro" style="width: 14px; height: 14px; margin: 0; cursor: pointer;" checked>
+      <label for="chkRetro" style="cursor: pointer; margin: 0; user-select: none; font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.75);">Efecto Consola DS (12-bit / Lo-Fi)</label>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>🎨 Tonos</h2>
+    <div class="tone-row">
+      <div class="tone-btn active" data-tone="1">🎀 Chica Joven<br><small>F0:280 Fmt:130%</small></div>
+      <div class="tone-btn" data-tone="2">🎭 Mujer<br><small>F0:230 Fmt:118%</small></div>
+      <div class="tone-btn" data-tone="3">🎵 Hombre<br><small>F0:120 Fmt:100%</small></div>
+      <div class="tone-btn" data-tone="4">👾 Niña<br><small>F0:340 Fmt:145%</small></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>📝 Texto</h2>
+    <textarea id="inputText">Hola, soy Luna. ¿Qué quieres ahora, baka?</textarea>
+    <div class="btn-row">
+      <button class="btn btn-primary" id="btnSpeak">▶ Hablar</button>
+      <button class="btn btn-stop" id="btnStop">■ Detener</button>
+    </div>
+  </div>
+
+  <div id="output"></div>
+  <div class="status" id="status">Listo.</div>
+</div>
+
+<script>
+// ════════════════════════════════════════════════════════════
+//  FORMANT SPEECH SYNTHESIZER
+//  Source: Sawtooth oscillator (glottal buzz) at F0
+//  Filter: 3 parallel bandpass filters (F1, F2, F3) per phoneme
+//  Noise:  White noise for unvoiced consonants (s, f, etc.)
+// ════════════════════════════════════════════════════════════
+
+// Spanish vowel formants — refined with wider bandwidths
+const VOWELS = {
+  'a': { f1: 800, f2: 1150, f3: 2550, dur: 0.14, q1: 5, q2: 7, q3: 8 },
+  'e': { f1: 480, f2: 1900, f3: 2550, dur: 0.12, q1: 5, q2: 8, q3: 8 },
+  'i': { f1: 270, f2: 2350, f3: 3100, dur: 0.11, q1: 4, q2: 9, q3: 9 },
+  'o': { f1: 520, f2:  850, f3: 2550, dur: 0.14, q1: 5, q2: 6, q3: 8 },
+  'u': { f1: 320, f2:  700, f3: 2550, dur: 0.12, q1: 4, q2: 5, q3: 8 },
+};
+
+// Consonants: type= plosive|fricative|nasal|liquid|glide
+const CONSONANTS = {
+  'b': { voiced:true,  type:'plosive',   f1:300, f2:900,  f3:2500, dur:0.04 },
+  'd': { voiced:true,  type:'plosive',   f1:300, f2:1700, f3:2500, dur:0.04 },
+  'g': { voiced:true,  type:'plosive',   f1:300, f2:1050, f3:2500, dur:0.04 },
+  'p': { voiced:false, type:'plosive',   f1:400, f2:1000, f3:2500, dur:0.03 },
+  't': { voiced:false, type:'plosive',   f1:400, f2:1600, f3:3000, dur:0.03 },
+  'k': { voiced:false, type:'plosive',   f1:400, f2:1800, f3:3000, dur:0.03 },
+  'c': { voiced:false, type:'plosive',   f1:400, f2:1800, f3:3000, dur:0.03 },
+  'q': { voiced:false, type:'plosive',   f1:400, f2:1800, f3:3000, dur:0.03 },
+  'f': { voiced:false, type:'fricative', f1:500, f2:1500, f3:3500, dur:0.08 },
+  's': { voiced:false, type:'fricative', f1:600, f2:2000, f3:5000, dur:0.08 },
+  'x': { voiced:false, type:'fricative', f1:500, f2:1600, f3:4000, dur:0.07 },
+  'j': { voiced:false, type:'fricative', f1:400, f2:1400, f3:3000, dur:0.07 },
+  'h': { voiced:false, type:'fricative', f1:500, f2:1500, f3:3000, dur:0.05 },
+  'z': { voiced:true,  type:'fricative', f1:300, f2:1500, f3:3500, dur:0.06 },
+  'm': { voiced:true,  type:'nasal',     f1:280, f2:1000, f3:2200, dur:0.08 },
+  'n': { voiced:true,  type:'nasal',     f1:280, f2:1450, f3:2500, dur:0.07 },
+  'ñ': { voiced:true,  type:'nasal',     f1:300, f2:1650, f3:2600, dur:0.08 },
+  'l': { voiced:true,  type:'liquid',    f1:350, f2:1100, f3:2800, dur:0.07 },
+  'r': { voiced:true,  type:'liquid',    f1:350, f2:1350, f3:2500, dur:0.05 },
+  'v': { voiced:true,  type:'fricative', f1:280, f2:950,  f3:2400, dur:0.05 },
+  'w': { voiced:true,  type:'glide',     f1:300, f2:750,  f3:2500, dur:0.06 },
+  'y': { voiced:true,  type:'glide',     f1:280, f2:2100, f3:3000, dur:0.05 },
+  'ch':{ voiced:false, type:'fricative', f1:400, f2:2000, f3:3500, dur:0.06 },
+  'rr':{ voiced:true,  type:'liquid',    f1:350, f2:1350, f3:2500, dur:0.10 },
+};
+
+const ACCENT_MAP = {'á':'a','é':'e','í':'i','ó':'o','ú':'u','ü':'u'};
+const SILENT = new Set([' ','.','!','?','¡','¿',',',';',':','"',"'",'(',')','[',']','-','—','…','\n','\r','\t']);
+
+const PRESETS = {
+  1: { speed: 14, pitch: 280, formant: 130, breath: 40, depth: 15, inton: 60, vol: 100 }, // Chica Joven
+  2: { speed: 12, pitch: 230, formant: 118, breath: 30, depth: 25, inton: 45, vol: 100 }, // Mujer
+  3: { speed: 9,  pitch: 120, formant: 100, breath: 10, depth: 60, inton: 30, vol: 100 }, // Hombre
+  4: { speed: 16, pitch: 340, formant: 145, breath: 50, depth: 10, inton: 65, vol: 100 }, // Niña
+};
+
+let audioCtx = null;
+let noiseBuffer = null;
+let isPlaying = false;
+let speakTimeout = null;
+let lastFormants = { f1: 300, f2: 1200, f3: 2500 };
+let bitcrusherNode = null;
+let dsFilterNode = null;
+
+// ── Local Storage Persistence ──
+function saveVoiceConfigLocal() {
+  const cfg = {
+    enabled: true,
+    speed: parseInt(document.getElementById('slSpeed').value),
+    pitch: parseInt(document.getElementById('slPitch').value),
+    formant: parseInt(document.getElementById('slFormant').value),
+    breath: parseInt(document.getElementById('slBreath').value),
+    depth: parseInt(document.getElementById('slDepth').value),
+    inton: parseInt(document.getElementById('slInton').value),
+    vol: parseInt(document.getElementById('slVol').value),
+    intonStyle: document.getElementById('selIntonStyle').value,
+    retro: document.getElementById('chkRetro').checked,
+    updatedAt: Date.now()
+  };
+  localStorage.setItem("luna_voice_config_v4", JSON.stringify(cfg));
+}
+
+function loadVoiceConfigLocal() {
+  try {
+    const saved = localStorage.getItem("luna_voice_config_v4");
+    if (saved) {
+      const cfg = JSON.parse(saved);
+      document.getElementById('slSpeed').value = cfg.speed !== undefined ? cfg.speed : 12;
+      document.getElementById('slPitch').value = cfg.pitch !== undefined ? cfg.pitch : 240;
+      document.getElementById('slFormant').value = cfg.formant !== undefined ? cfg.formant : 120;
+      document.getElementById('slBreath').value = cfg.breath !== undefined ? cfg.breath : 35;
+      document.getElementById('slDepth').value = cfg.depth !== undefined ? cfg.depth : 20;
+      document.getElementById('slInton').value = cfg.inton !== undefined ? cfg.inton : 55;
+      document.getElementById('slVol').value = cfg.vol !== undefined ? cfg.vol : 100;
+      if (cfg.intonStyle) document.getElementById('selIntonStyle').value = cfg.intonStyle;
+      document.getElementById('chkRetro').checked = cfg.retro !== undefined ? cfg.retro : true;
+      
+      // Update text values
+      document.getElementById('vSpeed').textContent = document.getElementById('slSpeed').value;
+      document.getElementById('vPitch').textContent = document.getElementById('slPitch').value;
+      document.getElementById('vFormant').textContent = document.getElementById('slFormant').value + '%';
+      document.getElementById('vBreath').textContent = document.getElementById('slBreath').value;
+      document.getElementById('vDepth').textContent = document.getElementById('slDepth').value;
+      document.getElementById('vInton').textContent = document.getElementById('slInton').value;
+      document.getElementById('vVol').textContent = document.getElementById('slVol').value;
+    }
+  } catch (e) { console.warn("loadVoiceConfigLocal failed", e); }
+}
+
+// ── Slider sync ──
+document.querySelectorAll('.slider-row input[type="range"]').forEach(sl => {
+  const v = sl.parentElement.querySelector('.val');
+  sl.addEventListener('input', () => {
+    v.textContent = sl.value + (sl.id === 'slFormant' ? '%' : '');
+    saveVoiceConfigLocal();
+  });
+});
+
+document.getElementById('selIntonStyle').addEventListener('change', saveVoiceConfigLocal);
+document.getElementById('chkRetro').addEventListener('change', saveVoiceConfigLocal);
+
+// ── Presets ──
+document.querySelectorAll('.tone-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tone-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const p = PRESETS[btn.dataset.tone];
+    setS('slSpeed', p.speed); setS('slPitch', p.pitch); setS('slFormant', p.formant);
+    setS('slBreath', p.breath); setS('slDepth', p.depth); setS('slInton', p.inton); setS('slVol', p.vol);
+    saveVoiceConfigLocal();
+  });
+});
+
+function setS(id, v) {
+  const el = document.getElementById(id);
+  el.value = v;
+  const valEl = el.parentElement.querySelector('.val');
+  valEl.textContent = id === 'slFormant' ? v + '%' : v;
+}
+
+function getP() {
+  return {
+    speed:      parseInt(document.getElementById('slSpeed').value),
+    pitch:      parseInt(document.getElementById('slPitch').value),
+    formant:    parseInt(document.getElementById('slFormant').value) / 100, // 1.0 = male, 1.2 = female, 1.4 = child
+    breath:     parseInt(document.getElementById('slBreath').value) / 100,
+    depth:      parseInt(document.getElementById('slDepth').value) / 100,
+    inton:      parseInt(document.getElementById('slInton').value) / 100,
+    vol:        parseInt(document.getElementById('slVol').value) / 100,
+    intonStyle: document.getElementById('selIntonStyle').value,
+  };
+}
+
+// ════════════════════════════════════
+//  INIT + NOISE BUFFER + FX CHAIN
+// ════════════════════════════════════
+function makeBitcrusherCurve(bits) {
+  const steps = Math.pow(2, bits);
+  const len = 4096;
+  const curve = new Float32Array(len);
+  for (let i = 0; i < len; i++) {
+    const x = (i / (len - 1)) * 2 - 1;
+    curve[i] = Math.round(x * (steps / 2)) / (steps / 2);
+  }
+  return curve;
+}
+
+function initAudio() {
+  if (audioCtx) { if (audioCtx.state === 'suspended') audioCtx.resume(); return; }
+  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  
+  // Pre-generate white noise buffer (1 second)
+  const sr = audioCtx.sampleRate;
+  noiseBuffer = audioCtx.createBuffer(1, sr, sr);
+  const data = noiseBuffer.getChannelData(0);
+  for (let i = 0; i < sr; i++) data[i] = Math.random() * 2 - 1;
+  
+  // Bitcrusher Node (12-bit depth simulating retro hardware audio DAC)
+  bitcrusherNode = audioCtx.createWaveShaper();
+  bitcrusherNode.curve = makeBitcrusherCurve(12);
+  bitcrusherNode.oversample = 'none';
+  
+  // Console Filter (6.5kHz limit simulating small portable console speaker bandwidth)
+  dsFilterNode = audioCtx.createBiquadFilter();
+  dsFilterNode.type = 'lowpass';
+  dsFilterNode.frequency.value = 6500;
+  
+  // Connect FX Chain to destination
+  bitcrusherNode.connect(dsFilterNode);
+  dsFilterNode.connect(audioCtx.destination);
+}
+
+// ════════════════════════════════════
+//  CREATE FORMANT FILTER CHAIN
+// ════════════════════════════════════
+function createFormantChain(f1, f2, f3, gain, dur, q1=5, q2=7, q3=8, envType='vowel') {
+  const now = audioCtx.currentTime;
+  const bp1 = audioCtx.createBiquadFilter();
+  bp1.type = 'bandpass'; bp1.Q.value = q1;
+  const bp2 = audioCtx.createBiquadFilter();
+  bp2.type = 'bandpass'; bp2.Q.value = q2;
+  const bp3 = audioCtx.createBiquadFilter();
+  bp3.type = 'bandpass'; bp3.Q.value = q3;
+  
+  // Formant Glide (Coarticulation): ramp frequencies from the previous phoneme's formants
+  const glideTime = Math.min(0.025, dur * 0.3);
+  
+  bp1.frequency.setValueAtTime(lastFormants.f1, now);
+  bp1.frequency.linearRampToValueAtTime(f1, now + glideTime);
+  
+  bp2.frequency.setValueAtTime(lastFormants.f2, now);
+  bp2.frequency.linearRampToValueAtTime(f2, now + glideTime);
+  
+  bp3.frequency.setValueAtTime(lastFormants.f3, now);
+  bp3.frequency.linearRampToValueAtTime(f3, now + glideTime);
+  
+  // Save current values for next phoneme coarticulation
+  lastFormants = { f1, f2, f3 };
+  
+  const g1 = audioCtx.createGain(); g1.gain.value = gain * 1.0;
+  const g2 = audioCtx.createGain(); g2.gain.value = gain * 0.6;
+  const g3 = audioCtx.createGain(); g3.gain.value = gain * 0.25;
+  const merger = audioCtx.createGain();
+  
+  // Clean linear ADSR-like envelope for all phonemes (avoids WebAudio exponential errors)
+  merger.gain.setValueAtTime(0.0, now);
+  if (envType === 'plosive') {
+    // Very sharp transient click (no sustain, rapid decay) to avoid "tch" / friction sound
+    const clickDur = Math.min(0.014, dur * 0.45);
+    merger.gain.linearRampToValueAtTime(gain * 1.2, now + 0.002);
+    merger.gain.linearRampToValueAtTime(0.0, now + clickDur);
+  } else if (envType === 'nasal') {
+    // Nasal sounds (soft attack, sustained, slow release)
+    merger.gain.linearRampToValueAtTime(gain, now + dur * 0.25);
+    merger.gain.setValueAtTime(gain, now + dur * 0.85);
+    merger.gain.linearRampToValueAtTime(0.0, now + dur);
+  } else {
+    // Standard vowel / fricative
+    merger.gain.linearRampToValueAtTime(gain, now + dur * 0.15);
+    merger.gain.setValueAtTime(gain * 0.85, now + dur * 0.8);
+    merger.gain.linearRampToValueAtTime(0.0, now + dur);
+  }
+  
+  bp1.connect(g1); g1.connect(merger);
+  bp2.connect(g2); g2.connect(merger);
+  bp3.connect(g3); g3.connect(merger);
+  
+  const useRetro = document.getElementById('chkRetro').checked;
+  if (useRetro) {
+    merger.connect(bitcrusherNode);
+  } else {
+    merger.connect(audioCtx.destination);
+  }
+  
+  return { bp1, bp2, bp3, merger };
+}
+
+// ════════════════════════════════════
+//  GET INTONATION SHIFT
+// ════════════════════════════════════
+function getIntonationShift(posRatio, sentenceType, p, isConsonant) {
+  const scale = isConsonant ? 0.7 : 1.0;
+  const style = p.intonStyle || 'expressive';
+  
+  if (style === 'flat') {
+    return 0; // Monotone robot
+  }
+  
+  if (style === 'melodious') {
+    // Singing / Wavy tone
+    if (sentenceType === 'question') {
+      return (Math.sin(posRatio * Math.PI * 2.5) * 45 + posRatio * 75) * p.inton * scale;
+    } else if (sentenceType === 'exclamation') {
+      return (Math.sin(posRatio * Math.PI * 2.0) * 50 + 20) * p.inton * scale;
+    } else {
+      return Math.sin(posRatio * Math.PI * 2.0) * 60 * p.inton * scale;
+    }
+  }
+  
+  if (style === 'shy') {
+    // Low, drops rapidly showing lack of confidence
+    if (sentenceType === 'question') {
+      return (posRatio * 35 - 25) * p.inton * scale;
+    } else if (sentenceType === 'exclamation') {
+      return (15 - posRatio * 35) * p.inton * scale;
+    } else {
+      return -posRatio * 40 * p.inton * scale;
+    }
+  }
+  
+  if (style === 'serious') {
+    // Grave / neutral, drops very slightly at the end
+    if (sentenceType === 'question') {
+      return (-12 + posRatio * 35) * p.inton * scale;
+    } else if (sentenceType === 'exclamation') {
+      return 5 * p.inton * scale;
+    } else {
+      return -posRatio * 15 * p.inton * scale;
+    }
+  }
+  
+  // Default: expressive (original style)
+  if (sentenceType === 'question') {
+    return (-25 + posRatio * 90) * p.inton * scale;
+  } else if (sentenceType === 'exclamation') {
+    return (25 - posRatio * 15) * p.inton * scale;
+  } else {
+    return (Math.sin(posRatio * Math.PI * 0.9) * 45 - posRatio * 25) * p.inton * scale;
+  }
+}
+
+// ════════════════════════════════════
+//  PLAY VOWEL (glottal source → formants)
+// ════════════════════════════════════
+function playVowel(vowelKey, p, posRatio, sentenceType) {
+  const v = VOWELS[vowelKey];
+  if (!v) return 0;
+  const now = audioCtx.currentTime;
+  
+  let pitchMult = 1.0;
+  let volMult = 1.0;
+  if (sentenceType === 'exclamation') {
+    pitchMult = 1.15;
+  }
+  
+  const intonShift = getIntonationShift(posRatio, sentenceType, p, false);
+  const f0 = (p.pitch * pitchMult) + intonShift + (Math.random() * 4 - 2);
+  const dur = v.dur * (12 / p.speed);
+  const vol = p.vol * volMult * 0.6;
+  const fShift = p.formant;
+  
+  // Glottal source with vibrato
+  const glottal = audioCtx.createOscillator();
+  glottal.type = 'sawtooth';
+  glottal.frequency.setValueAtTime(f0, now);
+  
+  const vibrato = audioCtx.createOscillator();
+  vibrato.type = 'sine'; vibrato.frequency.value = 5.5;
+  const vibGain = audioCtx.createGain(); vibGain.gain.value = 3;
+  vibrato.connect(vibGain); vibGain.connect(glottal.frequency);
+  
+  // Glottal Warmth Filter (Rosenberg approximation, low-pass at 1400Hz)
+  const warmFilter = audioCtx.createBiquadFilter();
+  warmFilter.type = 'lowpass';
+  warmFilter.frequency.setValueAtTime(1400, now);
+  
+  // Breathiness (smooth linear ramp down)
+  const bn = audioCtx.createBufferSource(); bn.buffer = noiseBuffer;
+  const bg = audioCtx.createGain();
+  bg.gain.setValueAtTime(0.0, now);
+  bg.gain.linearRampToValueAtTime(vol * p.breath * 0.5, now + dur * 0.1);
+  bg.gain.linearRampToValueAtTime(0.0, now + dur);
+  
+  // Sub-harmonic (smooth linear ramp down)
+  const sub = audioCtx.createOscillator(); sub.type = 'sine';
+  sub.frequency.setValueAtTime(f0 * 0.5, now);
+  const sg = audioCtx.createGain();
+  sg.gain.setValueAtTime(0.0, now);
+  sg.gain.linearRampToValueAtTime(vol * p.depth * 0.3, now + dur * 0.05);
+  sg.gain.linearRampToValueAtTime(0.0, now + dur);
+  
+  const chain = createFormantChain(v.f1*fShift, v.f2*fShift, v.f3*fShift, vol, dur, v.q1, v.q2, v.q3);
+  
+  // Route glottal source through the warmth filter, then to formant filters
+  glottal.connect(warmFilter);
+  warmFilter.connect(chain.bp1); warmFilter.connect(chain.bp2); warmFilter.connect(chain.bp3);
+  
+  bn.connect(bg); bg.connect(chain.bp1); bg.connect(chain.bp2); bg.connect(chain.bp3);
+  sub.connect(sg); sg.connect(chain.bp1);
+  
+  glottal.start(now); vibrato.start(now); bn.start(now); sub.start(now);
+  glottal.stop(now+dur+0.01); vibrato.stop(now+dur+0.01); bn.stop(now+dur+0.01); sub.stop(now+dur+0.01);
+  return dur * 1000;
+}
+
+// ════════════════════════════════════
+//  PLAY CONSONANT — type-aware envelopes
+// ════════════════════════════════════
+function playConsonant(consKey, p, posRatio, sentenceType) {
+  const c = CONSONANTS[consKey];
+  if (!c) return 30;
+  const now = audioCtx.currentTime;
+  
+  let pitchMult = 1.0;
+  let volMult = 1.0;
+  if (sentenceType === 'exclamation') {
+    pitchMult = 1.15;
+  }
+  
+  const intonShift = getIntonationShift(posRatio, sentenceType, p, true);
+  const dur = c.dur * (12 / p.speed);
+  const vol = p.vol * volMult * 0.4;
+  const fShift = p.formant;
+  const chain = createFormantChain(c.f1*fShift, c.f2*fShift, c.f3*fShift, vol, dur, 4, 6, 7, c.type);
+  if (c.voiced) {
+    const gl = audioCtx.createOscillator(); gl.type = 'sawtooth';
+    gl.frequency.setValueAtTime((p.pitch * pitchMult) + intonShift, now);
+    
+    // Glottal Warmth Filter
+    const warmFilter = audioCtx.createBiquadFilter();
+    warmFilter.type = 'lowpass';
+    warmFilter.frequency.setValueAtTime(1400, now);
+    
+    gl.connect(warmFilter);
+    warmFilter.connect(chain.bp1); warmFilter.connect(chain.bp2); warmFilter.connect(chain.bp3);
+    
+    // Voiced breathiness
+    const bn = audioCtx.createBufferSource(); bn.buffer = noiseBuffer;
+    const bg = audioCtx.createGain(); 
+    bg.gain.setValueAtTime(0.0, now);
+    bg.gain.linearRampToValueAtTime(vol * p.breath * 0.3, now + dur * 0.1);
+    bg.gain.linearRampToValueAtTime(0.0, now + dur);
+    
+    bn.connect(bg); bg.connect(chain.bp1); bg.connect(chain.bp2);
+    gl.start(now); bn.start(now); gl.stop(now+dur+0.01); bn.stop(now+dur+0.01);
+  } else {
+    // Unvoiced: use white noise with a gain boost (5.0x) to compensate for bandpass attenuation
+    const ns = audioCtx.createBufferSource(); ns.buffer = noiseBuffer;
+    const ng = audioCtx.createGain(); 
+    ng.gain.setValueAtTime(vol * 5.0, now);
+    ns.connect(ng);
+    ng.connect(chain.bp1); ng.connect(chain.bp2); ng.connect(chain.bp3);
+    ns.start(now); ns.stop(now+dur+0.01);
+  }
+  return dur * 1000;
+}
+
+// ════════════════════════════════════
+//  SPEAK
+// ════════════════════════════════════
+function speak(text) {
+  stop();
+  initAudio();
+  
+  // Reset coarticulation baseline to neutral formants
+  lastFormants = { f1: 300, f2: 1200, f3: 2500 };
+  
+  const p = getP();
+  const outputEl = document.getElementById('output');
+  const statusEl = document.getElementById('status');
+  outputEl.innerHTML = '';
+  isPlaying = true;
+  statusEl.textContent = '🔊 Hablando...';
+  
+  const chars = [...text];
+  let idx = 0;
+  const baseMs = Math.max(40, 140 - (p.speed * 7));
+  
+  // Pre-parse sentence structures for dynamic intonation
+  const charContexts = [];
+  let i = 0;
+  while (i < chars.length) {
+    let type = 'normal';
+    const sentenceCharsList = [];
+    let foundDelimiter = false;
+    
+    // Gather chars for the current sentence block
+    while (i < chars.length && !foundDelimiter) {
+      const ch = chars[i];
+      sentenceCharsList.push(ch);
+      if (ch === '¿') type = 'question';
+      if (ch === '¡') type = 'exclamation';
+      
+      if (ch === '?' || ch === '!' || ch === '.' || ch === ';') {
+        if (ch === '?') type = 'question';
+        if (ch === '!') type = 'exclamation';
+        foundDelimiter = true;
+      }
+      i++;
+    }
+    
+    const len = sentenceCharsList.length;
+    for (let j = 0; j < len; j++) {
+      charContexts.push({
+        ch: sentenceCharsList[j],
+        type: type,
+        posRatio: j / Math.max(len - 1, 1),
+        phoneme: null,
+        skipSound: false
+      });
+    }
+  }
+
+  // Post-process with Spanish phonetic rules
+  for (let k = 0; k < charContexts.length; k++) {
+    const ctx = charContexts[k];
+    if (ctx.skipSound || SILENT.has(ctx.ch)) continue;
+    
+    const ch = ctx.ch.toLowerCase();
+    const cleanCh = ACCENT_MAP[ch] || ch;
+    
+    const nextCtx = charContexts[k + 1];
+    const nextCh = nextCtx ? nextCtx.ch.toLowerCase() : '';
+    const cleanNextCh = ACCENT_MAP[nextCh] || nextCh;
+    
+    // 1. 'ch' digraph
+    if (cleanCh === 'c' && cleanNextCh === 'h') {
+      ctx.phoneme = 'ch';
+      nextCtx.skipSound = true;
+      continue;
+    }
+    
+    // 2. 'll' digraph
+    if (cleanCh === 'l' && cleanNextCh === 'l') {
+      ctx.phoneme = 'y';
+      nextCtx.skipSound = true;
+      continue;
+    }
+    
+    // 3. 'rr' digraph
+    if (cleanCh === 'r' && cleanNextCh === 'r') {
+      ctx.phoneme = 'rr';
+      nextCtx.skipSound = true;
+      continue;
+    }
+    
+    // 4. Silent 'h'
+    if (cleanCh === 'h') {
+      ctx.skipSound = true;
+      continue;
+    }
+    
+    // 5. 'c' before 'e'/'i' sounds like 's', else 'k'
+    if (cleanCh === 'c') {
+      if (cleanNextCh === 'e' || cleanNextCh === 'i') {
+        ctx.phoneme = 's';
+      } else {
+        ctx.phoneme = 'k';
+      }
+      continue;
+    }
+    
+    // 6. 'g' before 'e'/'i' sounds like 'j', else 'g'
+    if (cleanCh === 'g') {
+      if (cleanNextCh === 'e' || cleanNextCh === 'i') {
+        ctx.phoneme = 'j';
+      } else {
+        ctx.phoneme = 'g';
+      }
+      continue;
+    }
+    
+    // 7. 'qu' digraph (u is silent, e.g. "que", "quieres")
+    if (cleanCh === 'q' && cleanNextCh === 'u') {
+      ctx.phoneme = 'k';
+      nextCtx.skipSound = true;
+      continue;
+    }
+    
+    // 8. 'gu' before 'e'/'i' (u is silent, e.g. "guerra")
+    if (cleanCh === 'g' && cleanNextCh === 'u') {
+      const nextNextCtx = charContexts[k + 2];
+      const nextNextCh = nextNextCtx ? nextNextCtx.ch.toLowerCase() : '';
+      const cleanNextNextCh = ACCENT_MAP[nextNextCh] || nextNextCh;
+      if (cleanNextNextCh === 'e' || cleanNextNextCh === 'i') {
+        ctx.phoneme = 'g';
+        nextCtx.skipSound = true;
+      }
+      continue;
+    }
+  }
+  
+  function next() {
+    if (idx >= charContexts.length || !isPlaying) {
+      isPlaying = false;
+      statusEl.textContent = '✅ Completado.';
+      return;
+    }
+    const ctx = charContexts[idx];
+    const ch = ctx.ch;
+    const posRatio = ctx.posRatio;
+    const sentenceType = ctx.type;
+    
+    const span = document.createElement('span');
+    span.textContent = ch === ' ' ? '\u00A0' : ch;
+    span.style.animation = 'letterPop 0.15s ease forwards';
+    outputEl.appendChild(span);
+    
+    let delayMs;
+    if (SILENT.has(ch)) {
+      const isPeriod = '.!?'.includes(ch);
+      delayMs = isPeriod ? baseMs * 5 : (ch === ',' ? baseMs * 2.5 : baseMs * 0.5);
+    } else if (ctx.skipSound) {
+      delayMs = baseMs * 0.3; // short delay, type only
+    } else {
+      const lower = ctx.phoneme || (ACCENT_MAP[ch.toLowerCase()] || ch.toLowerCase());
+      if (VOWELS[lower]) {
+        playVowel(lower, p, posRatio, sentenceType);
+        delayMs = baseMs * 1.2;
+      } else if (CONSONANTS[lower]) {
+        playConsonant(lower, p, posRatio, sentenceType);
+        delayMs = baseMs * 0.7;
+      } else {
+        delayMs = baseMs * 0.4;
+      }
+    }
+    idx++;
+    speakTimeout = setTimeout(next, delayMs);
+  }
+  
+  next();
+}
+
+function stop() {
+  isPlaying = false;
+  if (speakTimeout) { clearTimeout(speakTimeout); speakTimeout = null; }
+  document.getElementById('status').textContent = 'Detenido.';
+}
+
+document.getElementById('btnSpeak').addEventListener('click', () => speak(document.getElementById('inputText').value));
+document.getElementById('btnStop').addEventListener('click', stop);
+loadVoiceConfigLocal();
+</script>
+</body>
+</html>

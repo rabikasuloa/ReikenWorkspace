@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WorldBuilding - Reiken</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="worldbuilding.css">
+  <link rel="stylesheet" href="worldbuilding_cards.css">
+  <link rel="icon" href="icons/ReikenIcon.png">
+</head>
+
+<body class="projects-body">
+  <div id="rk-bg"></div>
+
+  <header class="index-topbar" style="display:none">
+    <div class="index-topbar-container">
+      <span>REIKEN</span>
+      <div class="index-topbar-logo"><img src="icons/ReikenIcon.png" alt="logo"></div>
+      <span>STUDIOS</span>
+    </div>
+  </header>
+
+  <div class="projects-layout">
+
+    <aside class="sidebar" id="sidebar">
+      <button class="sidebar-toggle" id="sidebarToggle" title="Colapsar menú">
+        <img src="icons/iconos/flecha.png" alt="◀" id="sidebarArrowImg"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='inline'">
+        <span id="sidebarArrowFallback" style="display:none;font-size:18px;color:white;">◀</span>
+      </button>
+      <div class="sidebar-content" id="sidebarContent">
+        <div class="sidebar-recommendations">
+          <p class="sidebar-label">Recomendaciones:</p>
+        </div>
+        <div class="sidebar-bottom">
+          <div class="sidebar-divider"></div>
+          <div class="sidebar-shortcuts" id="shortcutList"></div>
+          <button class="sidebar-create-shortcut" id="createShortcutBtn">
+            <span class="sidebar-icon-circle sidebar-circle-add">+</span>
+            <span class="sidebar-item-label">Crear atajo</span>
+          </button>
+          <div class="sidebar-divider"></div>
+          <button class="sidebar-item" id="btnLunaChat">
+            <img src="icons/iconos/Luna.png" alt="" class="sidebar-icon-img" onerror="this.style.display='none'">
+            <span class="sidebar-item-label">Luna</span>
+          </button>
+          <button class="sidebar-item">
+            <img src="icons/iconos/reikanales.png" alt="" class="sidebar-icon-img" onerror="this.style.display='none'">
+            <span class="sidebar-item-label">Reikanales</span>
+          </button>
+          <button class="sidebar-item">
+            <img src="icons/iconos/notificaciones.png" alt="" class="sidebar-icon-img"
+              onerror="this.style.display='none'">
+            <span class="sidebar-item-label">Notificaciones</span>
+          </button>
+          <button class="sidebar-item" id="appearanceBtn">
+            <img src="https://res.cloudinary.com/dyy6zbkop/image/upload/v1774987409/yawddbmuvgompilk4mar.png" alt=""
+              class="sidebar-icon-img" onerror="this.style.display='none'">
+            <span class="sidebar-item-label">Apariencia</span>
+          </button>
+          <button class="sidebar-item" id="configBtn">
+            <img src="icons/iconos/config.png" alt="" class="sidebar-icon-img" onerror="this.style.display='none'">
+            <span class="sidebar-item-label">Configuracion</span>
+          </button>
+          <div class="sidebar-divider"></div>
+          <button class="sidebar-item sidebar-profile" id="profileBtn">
+            <div class="sidebar-avatar"><img id="sidebarAvatarImg" src="icons/Tu.png" alt="perfil"></div>
+            <span class="sidebar-item-label sidebar-alias" id="sidebarAlias">Alias</span>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <main class="projects-main wb-main" id="wbMain">
+
+      <!-- ══ CONCEPT DETAIL OVERLAY ══ -->
+      <div id="conceptDetail" class="wb-concept-detail hidden">
+        <div class="wb-cd-header">
+          <!-- Left: Navigation + Identity -->
+          <div class="wb-cd-header-left">
+            <button class="wb-cd-back-btn" id="cdBackBtn">
+              <img src="icons/iconos/flecha.png" alt="←"
+                onerror="this.style.display='none';this.parentElement.textContent='←'">
+            </button>
+            <div class="wb-cd-icon-wrap">
+              <div class="wb-cd-icon" id="cdIcon">
+                <img id="cdIconImg" src="" alt="">
+                <span id="cdIconText">?</span>
+              </div>
+              <button class="wb-cd-icon-edit-btn" id="cdIconEditBtn" title="Cambiar ícono">✏</button>
+              <input type="file" id="cdIconInput" accept="image/*" hidden>
+            </div>
+            <div class="wb-cd-title-wrap">
+              <div class="wb-cd-title" id="cdTitle" contenteditable="true" spellcheck="false">Concepto</div>
+              <div class="wb-cd-type-badge" id="cdTypeBadge">Raza</div>
+            </div>
+          </div>
+
+          <!-- Center: Hub search (only visible in hub mode) -->
+          <div class="wb-cd-hub-search-wrap" id="cdHubSearchWrap">
+            <span class="wb-hub-search-icon">🔍</span>
+            <input type="text" id="cdHubSearchInput" class="wb-hub-search-input" placeholder="Buscar sub-concepto...">
+            <button class="wb-hub-search-clear hidden" id="cdHubSearchClear">✕</button>
+          </div>
+
+          <!-- Right: Actions -->
+          <div class="wb-cd-header-right">
+            <button class="wb-cd-toolbar-btn" id="cdExplorerToggle" title="Explorador de conceptos">
+              <img src="https://res.cloudinary.com/dyy6zbkop/image/upload/v1774918493/zrbzq0xqjqo4lfpxapuz.png" alt="explorador">
+            </button>
+            <button class="wb-cd-action-btn" id="cdAddSubBtn">+ Sub-concepto</button>
+            <div class="wb-cd-add-block-wrap">
+              <button class="wb-cd-action-btn primary" id="cdAddBlockBtn">+ Bloque</button>
+              <div class="wb-block-type-menu hidden" id="blockTypeMenu">
+                <button data-block="texto">📝 Texto</button>
+                <button data-block="imagen">🖼 Imagen</button>
+                <button data-block="tablero">✏️ Tablero</button>
+                <button data-block="locacion">🗺 Locación</button>
+              </div>
+            </div>
+            <button class="wb-cd-close-btn" id="cdCloseBtn">✕</button>
+          </div>
+        </div>
+
+        <div class="wb-cd-body">
+          <!-- ══ HUB VIEW (Netflix Hero + YouTube Cards) ══ -->
+  <div class="wb-cd-hub-view hidden" id="cdHubView">
+            <!-- Hero Netflix for the concept -->
+            <div class="wb-cd-hub-hero" id="cdHubHero">
+              <div class="wb-cd-hub-hero-overlay">
+                <h1 class="wb-macro-hero-title" id="cdHubHeroTitle">Concepto</h1>
+                <p class="wb-macro-hero-desc" id="cdHubHeroDesc" contenteditable="plaintext-only" spellcheck="false">Descripción del concepto...</p>
+              </div>
+            </div>
+
+            <!-- Inner Navigation Tabs -->
+            <nav class="wb-cd-inner-tabs" id="cdInnerTabs">
+              <button class="wb-cd-inner-tab active" data-cdtab="subconceptos">📁 Subconceptos</button>
+              <button class="wb-cd-inner-tab" data-cdtab="relaciones">🔗 Relaciones</button>
+              <button class="wb-cd-inner-tab" data-cdtab="mapa">🗺️ Mapa</button>
+            </nav>
+
+            <!-- TAB 1: Subconceptos (Default) -->
+            <div class="wb-cd-tab-content active" id="cdTabSubconceptos">
+              <!-- Filter chips for sub-concept categories -->
+              <div class="wb-cd-hub-filters" id="cdHubFilters">
+                <div class="wb-hub-filter-chips" id="cdHubFilterChips"></div>
+              </div>
+              <!-- Sub-concepts by category -->
+              <div class="wb-macro-content" id="cdHubContent"></div>
+              <!-- Search results -->
+              <div class="wb-macro-search-results hidden" id="cdHubSearchResults"></div>
+            </div>
+
+            <!-- TAB 2: Relaciones -->
+            <div class="wb-cd-tab-content" id="cdTabRelaciones">
+              <div class="wb-cd-rel-search-section">
+                <div class="wb-cd-rel-search-bar">
+                  <span class="search-icon">🔍</span>
+                  <input type="text" id="cdRelSearchInput" placeholder="Vincular con otro concepto...">
+                  <button class="wb-rel-search-clear hidden" id="cdRelSearchClear">✕</button>
+                </div>
+                <div class="wb-cd-rel-quick-results hidden" id="cdRelQuickResults"></div>
+                <div class="wb-cd-rel-type-selector hidden" id="cdRelTypeSelector"></div>
+              </div>
+              <div class="wb-cd-relations-grid" id="cdTabRelationsGrid"></div>
+            </div>
+
+            <!-- TAB 3: Mapa -->
+            <div class="wb-cd-tab-content" id="cdTabMapa">
+              <div class="wb-cd-map-preview" id="cdTabMapPreview">
+                <p>Ubicación general del concepto...</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- ══ BLOCKS VIEW (original editor) ══ -->
+          <div class="wb-cd-blocks-area" id="cdBlocksArea">
+            <div class="wb-blocks-grid" id="blocksGrid"></div>
+            <div class="wb-blocks-empty" id="blocksEmpty">
+              <div class="wb-blocks-empty-inner">
+                <span class="wb-blocks-empty-icon">📄</span>
+                <p>Este concepto está vacío.<br>Añade bloques para dar forma a tu idea.</p>
+                <div class="wb-empty-quick-actions">
+                  <button class="wb-empty-quick-btn" data-block="texto"><span class="eq-icon">📝</span> Texto</button>
+                  <button class="wb-empty-quick-btn" data-block="imagen"><span class="eq-icon">🖼</span> Imagen</button>
+                  <button class="wb-empty-quick-btn" data-block="tablero"><span class="eq-icon">✏️</span> Tablero</button>
+                  <button class="wb-empty-quick-btn" data-block="locacion"><span class="eq-icon">🗺</span> Locación</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <aside class="wb-cd-sidebar collapsed" id="cdSidebar">
+            <div class="wb-cd-sidebar-header" id="cdSidebarHeader" style="cursor: grab;">
+              <span class="wb-cd-sidebar-label">EXPLORADOR</span>
+              <div class="wb-cd-sidebar-actions">
+                <button class="wb-cd-sidebar-action-btn" id="cdSearchToggle" title="Buscar conceptos">🔍</button>
+                <button class="wb-cd-sidebar-action-btn" id="cdSidebarAddBtn" title="Nuevo sub-concepto">+</button>
+                <button class="wb-cd-sidebar-action-btn" id="cdSidebarMinimizeBtn" title="Minimizar">_</button>
+                <button class="wb-cd-sidebar-action-btn" id="cdSidebarCloseBtn" title="Cerrar explorador">✕</button>
+              </div>
+            </div>
+            <div class="wb-explorer-search-wrap collapsed" id="cdSidebarSearchWrap">
+              <img class="ip-rp-search-icon"
+                src="https://res.cloudinary.com/dyy6zbkop/image/upload/v1774918493/zrbzq0xqjqo4lfpxapuz.png" alt="buscar"
+                style="width: 13px; height: 13px; opacity: 0.4;">
+              <input type="text" id="cdSidebarSearch" class="ip-rp-search" placeholder="Buscar concepto...">
+              <button class="wb-cd-search-clear" id="cdSearchClear" style="display:none; background:none; border:none; color:rgba(255,255,255,0.3); font-size:10px; cursor:pointer;">✕</button>
+            </div>
+            <div class="wb-cd-sidebar-subcontent" style="flex:1;overflow-y:auto">
+              <div id="cdSubconceptsList"></div>
+            </div>
+            <div class="wb-cd-sidebar-relations">
+              <div class="wb-cd-sidebar-header">
+                <span>Relaciones</span>
+                <button class="wb-cd-sidebar-action-btn" id="cdRelationsAddBtn" title="Nueva relación">+</button>
+              </div>
+              <div id="cdRelationsList"></div>
+            </div>
+            <div class="wb-cd-sidebar-resize" id="cdSidebarResize"></div>
+          </aside>
+        </div>
+
+        <div class="wb-mention-dropdown hidden" id="mentionDropdown"></div>
+        <div class="wb-save-indicator" id="wbSaveIndicator">✔ Guardado</div>
+      </div>
+
+      <!-- TOPNAV -->
+      <div class="wb-topnav">
+        <button class="ip-back-btn" id="backBtn" title="Volver al Proyecto">
+          <img src="icons/iconos/flecha.png" alt="←"
+            onerror="this.style.display='none';this.parentElement.textContent='←'">
+        </button>
+        <div class="wb-world-info">
+          <div class="wb-world-icon" id="wbWorldIcon">🌍</div>
+          <div>
+            <div class="wb-world-name" id="wbWorldName">WorldBuilding</div>
+            <div class="wb-breadcrumb" id="wbBreadcrumb"></div>
+          </div>
+        </div>
+        <nav class="wb-tabs" id="wbTabs">
+          <button class="wb-tab active" data-tab="hub">🏠 Hub</button>
+          <button class="wb-tab" data-tab="conceptos">📄 Conceptos</button>
+          <button class="wb-tab" data-tab="mapa">🌍 Mapas</button>
+        </nav>
+        <button class="projects-add-btn wb-add-btn" id="wbAddBtn" title="Nuevo elemento">+</button>
+      </div>
+
+      <!-- TAB HUB -->
+      <div class="wb-tab-content" id="tabHub">
+        <div class="wb-hub">
+          <div class="wb-hub-banner" id="wbHubBanner">
+            <div class="wb-hub-banner-overlay">
+              <h2 id="wbHubTitle">Cargando...</h2>
+              <p id="wbHubDesc"></p>
+            </div>
+          </div>
+          <div class="wb-hub-section">
+            <h3 class="wb-section-heading">Conceptos Recientes</h3>
+            <div class="wb-hub-concepts-row" id="hubRecentConcepts">
+              <div class="wb-empty-inline">Sin conceptos aún.</div>
+            </div>
+          </div>
+          <div class="wb-hub-section">
+            <h3 class="wb-section-heading">Resumen</h3>
+            <div class="wb-hub-stats" id="hubStats"></div>
+          </div>
+          <div class="wb-hub-section">
+            <h3 class="wb-section-heading">Locaciones Recientes</h3>
+            <div class="wb-hub-locations-row" id="hubRecentLocations">
+              <div class="wb-empty-inline">Sin locaciones aún.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB CONCEPTOS -->
+      <div class="wb-tab-content hidden" id="tabConceptos">
+        <!-- Vista inicial: 4 Macrocategorías -->
+        <div id="viewTypes" class="wb-view">
+          <div class="wb-macro-grid" id="typesGrid"></div>
+        </div>
+
+        <!-- Vista lista de conceptos de una macrocategoría -->
+        <div id="viewMacroHub" class="wb-view hidden">
+          <div class="wb-concepts-header">
+            <button class="wb-hub-back-btn" id="macroHubBackBtn">
+              <img src="icons/iconos/flecha.png" alt="←"
+                onerror="this.style.display='none';this.parentElement.textContent='←'">
+            </button>
+            <h2 id="macroHubTitle">Razas</h2>
+            <button class="wb-add-in-type-btn" id="addConceptInTypeBtn">+ Nuevo concepto</button>
+          </div>
+          <div class="wb-concepts-bubbles" id="conceptsBubbles"></div>
+        </div>
+      </div>
+
+      <!-- TAB MAPA -->
+      <div class="wb-tab-content hidden wb-tab-mapa-content" id="tabMapa">
+        <div class="wb-map-wrapper" id="mapWrapper">
+
+          <!-- Empty state -->
+          <div class="wb-map-empty-state" id="mapEmptyState">
+            <div class="wb-map-empty-inner">
+              <div class="wb-map-empty-icon">🗺️</div>
+              <h3>Sin mapa importado</h3>
+              <p>Importa una imagen para comenzar a trazar regiones y locaciones sobre el mundo.</p>
+              <label class="wb-map-import-main-btn" for="mapImportInputMain">
+                📁 Importar Mapa
+                <input type="file" id="mapImportInputMain" accept="image/*" style="display:none">
+              </label>
+            </div>
+          </div>
+
+          <!-- Active map area -->
+          <div class="wb-map-active hidden" id="mapActiveArea">
+            <button class="wb-map-fs-close" id="mapFsCloseBtn" title="Salir de pantalla completa">✕</button>
+
+            <!-- Left floating toolbar -->
+            <div class="wb-map-floattoolbar" id="mapFloatToolbar">
+              <div class="wb-panel-resize-h right" id="mapToolbarResize"></div>
+              <div class="wb-mft-header">
+                <button class="ip-rp-collapse-btn" id="mapToolbarCollapseBtn" title="Colapsar herramientas">
+                  <img src="https://res.cloudinary.com/dyy6zbkop/image/upload/v1774918492/uhz4zuqepkahn8dpjihd.png" alt="◀">
+                </button>
+              </div>
+
+              <div class="wb-mft-section">
+                <div class="wb-mft-section-label">VISTA</div>
+                <button class="wb-mft-tool-btn" id="mapFullscreenBtn" title="Pantalla Completa">
+                  <img src="https://cdn-icons-png.flaticon.com/512/130/130910.png" alt="⛶" class="wb-mft-fs-icon">
+                  <span class="wb-mft-tool-name">Fullscr.</span>
+                </button>
+              </div>
+
+              <div class="wb-mft-divider"></div>
+
+              <div class="wb-mft-section">
+                <div class="wb-mft-section-label">HERRAMIENTA</div>
+                <div class="wb-mft-tools">
+                  <button class="wb-mft-tool-btn active" data-tool="select" title="Seleccionar">
+                    <span class="wb-mft-tool-icon">↖</span>
+                    <span class="wb-mft-tool-name">Selec.</span>
+                  </button>
+                  <button class="wb-mft-tool-btn" data-tool="region" title="Trazar Región">
+                    <span class="wb-mft-tool-icon">⬡</span>
+                    <span class="wb-mft-tool-name">Región</span>
+                  </button>
+                  <button class="wb-mft-tool-btn" data-tool="location" title="Trazar Locación">
+                    <span class="wb-mft-tool-icon">📍</span>
+                    <span class="wb-mft-tool-name">Locación</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="wb-mft-divider"></div>
+
+              <div class="wb-mft-section">
+                <div class="wb-mft-section-label">COLOR</div>
+                <div class="wb-mft-color-row">
+                  <input type="color" id="mapShapeColor" value="#5a8fd4" class="wb-mft-color-input"
+                    title="Color de la forma">
+                  <span class="wb-mft-color-label" id="mapShapeColorLabel">#5a8fd4</span>
+                </div>
+                <div class="wb-mft-slider-row">
+                  <span class="wb-mft-section-label">RELLENO</span>
+                  <input type="range" id="mapShapeOpacity" min="10" max="90" value="40"
+                    class="tool-slider wb-mft-slider">
+                  <span id="mapShapeOpacityVal" class="wb-mft-val-label">40%</span>
+                </div>
+              </div>
+
+              <div class="wb-mft-divider"></div>
+
+              <div class="wb-mft-section">
+                <div class="wb-mft-section-label">ETIQUETAS</div>
+                <div class="wb-mft-slider-row">
+                  <span class="wb-mft-section-label">ESCALA</span>
+                  <input type="range" id="mapLabelScale" min="0.5" max="2.0" step="0.1" value="1.0"
+                    class="tool-slider wb-mft-slider">
+                  <span id="mapLabelScaleVal" class="wb-mft-val-label">1.0x</span>
+                </div>
+                <div style="margin-top:8px">
+                  <span class="wb-mft-section-label">MODO</span>
+                  <select id="mapLabelMode" class="wb-mft-select">
+                    <option value="both">Ambos</option>
+                    <option value="icon">Solo Icono</option>
+                    <option value="name">Solo Nombre</option>
+                    <option value="none">Nada</option>
+                  </select>
+                </div>
+                <div style="margin-top:12px; display:flex; align-items:center; gap:6px;">
+                  <input type="checkbox" id="mapShowRaces" style="cursor:pointer;">
+                  <label for="mapShowRaces" style="color:rgba(255,255,255,0.7);font-size:12px;font-family:'Etna';cursor:pointer;">Ver Razas</label>
+                </div>
+              </div>
+
+              <div class="wb-mft-divider"></div>
+
+              <div class="wb-mft-section">
+                <label class="wb-mft-action-btn" for="mapReimportInput">📁 <span>Reimportar mapa</span></label>
+                <input type="file" id="mapReimportInput" accept="image/*" style="display:none">
+                <button class="wb-mft-action-btn wb-mft-action-save" id="mapSaveBtn">💾 <span>Guardar mapa</span></button>
+              </div>
+
+            </div>
+
+            <!-- Canvas zone -->
+            <div class="wb-map-canvas-wrap" id="mapCanvasWrap">
+              <canvas id="mapCanvas"></canvas>
+              <canvas id="mapOverlayCanvas"></canvas>
+              <canvas id="mapDrawingCanvas" style="pointer-events: none;"></canvas>
+              <div id="mapRegionLabels"></div>
+              <canvas id="mapRelationsCanvas"></canvas>
+            </div>
+
+            <!-- Right hierarchy panel -->
+            <div class="wb-map-hierarchy" id="mapHierarchyPanel">
+              <div class="wb-panel-resize-h left" id="mapHierResize"></div>
+              <div class="wb-map-hier-header">
+                <div style="display:flex; align-items:center; gap:10px;">
+                  <button class="ip-rp-collapse-btn" id="mapHierCollapseBtn" title="Colapsar jerarquía">
+                    <img src="https://res.cloudinary.com/dyy6zbkop/image/upload/v1774918492/uhz4zuqepkahn8dpjihd.png" alt="◀">
+                  </button>
+                  <span class="wb-map-hier-title">JERARQUÍA</span>
+                </div>
+                <button class="wb-map-hier-add-btn" id="mapAddRegionBtn" title="Dibujar Región">+ Región</button>
+              </div>
+              <div class="wb-map-hier-search">
+                <input type="text" id="mapHierSearch" placeholder="Buscar..." class="wb-map-hier-search-input">
+              </div>
+              <div class="wb-map-hier-tree" id="mapHierTree">
+                <div class="wb-map-hier-empty">Sin regiones aún.<br>Usa ⬡ para trazar una.</div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Drawing hint bar (shown while drawing polygon) -->
+          <div class="wb-map-hint-bar hidden" id="mapHintBar">
+            <span class="wb-map-hint-icon">✏️</span>
+            <span id="mapHintText">Haz clic para añadir puntos · Doble clic para cerrar la forma</span>
+            <button class="wb-map-hint-undo" id="mapHintUndo" title="Deshacer último punto">↩</button>
+            <button class="wb-map-hint-cancel" id="mapHintCancel">✕ Cancelar</button>
+          </div>
+
+        </div>
+      </div>
+
+    </main>
+
+    <!-- Right panel: concept explorer -->
+    <aside class="ip-right-panel" id="ipRightPanel">
+      <div class="ip-rp-header">
+        <button class="ip-rp-collapse-btn" id="rpCollapseBtn" title="Colapsar explorador">
+          <img src="https://res.cloudinary.com/dyy6zbkop/image/upload/v1774918492/uhz4zuqepkahn8dpjihd.png" alt="◀">
+        </button>
+        <span class="wb-explorer-title">EXPLORADOR</span>
+        <div class="ip-rp-header-actions">
+          <button class="ip-rp-expand-btn" id="rpSearchToggle" title="Buscar conceptos">🔍</button>
+          <button class="ip-rp-expand-btn" id="rpExpandBtn" title="Ampliar panel">↗</button>
+        </div>
+      </div>
+      <div class="wb-explorer-search-wrap">
+        <img class="ip-rp-search-icon"
+          src="https://res.cloudinary.com/dyy6zbkop/image/upload/v1774918493/zrbzq0xqjqo4lfpxapuz.png" alt="buscar">
+        <input type="text" id="ipSearch" class="ip-rp-search" placeholder="Buscar concepto...">
+      </div>
+      <div class="ip-rp-tree" id="ipConceptTree">
+        <p class="ip-rp-empty">Sin conceptos aún.</p>
+      </div>
+    </aside>
+
+  </div>
+
+
+  <!-- MODAL · NUEVO CONCEPTO -->
+  <div id="modalNewConcept" class="modal-overlay hidden">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2 id="modalNewConceptTitle">Nuevo Concepto</h2>
+        <button class="modal-close" id="closeModalNewConcept">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-row">
+          <div class="modal-icon-box" id="newConceptIconBox" title="Subir ícono">
+            <img id="newConceptIconPreview" src="" alt="">
+            <span class="modal-icon-hint">+</span>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:8px">
+            <input id="newConceptName" type="text" placeholder="Nombre del concepto..." class="modal-input">
+            <select id="newConceptType" class="modal-input" style="cursor:pointer">
+              <option value="">Selecciona tipo...</option>
+            </select>
+          </div>
+        </div>
+        <input type="file" id="newConceptIconInput" accept="image/*" hidden>
+        <textarea id="newConceptDesc" placeholder="Descripción breve..." class="modal-textarea" rows="3"></textarea>
+      </div>
+      <div class="modal-footer">
+        <button class="button-secondary" id="cancelModalNewConcept">Cancelar</button>
+        <button class="button-main modal-save-btn" id="saveNewConceptBtn">¡CREAR!</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL · EDITAR CONCEPTO -->
+  <div id="modalEditConcept" class="modal-overlay hidden">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2 id="modalEditConceptTitle">Editar Concepto</h2>
+        <button class="modal-close" id="closeModalEditConcept">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-row">
+          <div class="modal-icon-box" id="editConceptIconBox" title="Cambiar ícono">
+            <img id="editConceptIconPreview" src="" alt="">
+            <span class="modal-icon-hint">✏️</span>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:8px">
+            <input id="editConceptName" type="text" placeholder="Nombre del concepto..." class="modal-input">
+            <select id="editConceptType" class="modal-input" style="cursor:pointer" disabled>
+              <!-- Type is normally fixed, but we show it for context -->
+            </select>
+          </div>
+        </div>
+        <input type="file" id="editConceptIconInput" accept="image/*" hidden>
+        <textarea id="editConceptDesc" placeholder="Descripción breve..." class="modal-textarea" rows="4" style="font-family: 'Etna'; padding: 12px; margin-top: 10px;"></textarea>
+      </div>
+      <div class="modal-footer" style="justify-content:space-between">
+        <button class="button-secondary danger-text" id="deleteEditConceptBtn" style="background:rgba(200,80,80,0.1);color:#ff6b6b;border:1px solid rgba(200,80,80,0.2)">🗑 Eliminar</button>
+        <div style="display:flex;gap:10px">
+          <button class="button-secondary" id="cancelModalEditConcept">Cancelar</button>
+          <button class="button-main modal-save-btn" id="saveEditConceptBtn">GUARDAR CAMBIOS</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL · NUEVA REGIÓN -->
+  <div id="modalNewRegion" class="modal-overlay hidden">
+    <div class="modal-box modal-box-sm">
+      <div class="modal-header">
+        <h2 id="modalNewRegionTitle">Nueva Región</h2>
+        <button class="modal-close" id="closeModalNewRegion">✕</button>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px;margin-top:8px">
+        <input id="regionName" type="text" placeholder="Nombre de la región..." class="modal-input">
+        <div style="display:flex;align-items:center;gap:12px">
+          <label style="color:rgba(255,255,255,0.6);font-size:12px;white-space:nowrap">Color de
+            región:</label>
+          <input type="color" id="regionColor" value="#5a8fd4" class="modal-input"
+            style="width:46px;height:36px;padding:2px;border-radius:8px;cursor:pointer;flex-shrink:0">
+        </div>
+        <textarea id="regionDesc" placeholder="Descripción general del paisaje / zona..." class="modal-textarea"
+          rows="3"></textarea>
+        <div class="wb-icon-select-container">
+          <div class="wb-icon-select-label">Icono de región</div>
+          <div class="wb-icon-grid" id="regionIconGrid">
+            <button class="wb-icon-btn selected" data-icon="⬡">⬡</button>
+            <button class="wb-icon-btn" data-icon="🏰">🏰</button>
+            <button class="wb-icon-btn" data-icon="🏔️">🏔️</button>
+            <button class="wb-icon-btn" data-icon="🌲">🌲</button>
+            <button class="wb-icon-btn" data-icon="🌊">🌊</button>
+            <button class="wb-icon-btn wb-custom-icon-btn" id="customRegionIconBtn">+ Subir</button>
+          </div>
+          <input type="file" id="regionIconInput" accept="image/*" hidden>
+        </div>
+        <div style="margin-top:12px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+            <span class="wb-icon-select-label">Paisajes de región</span>
+            <button class="wb-mft-action-btn" id="addRegionLandscapeBtn"
+              style="width:auto;padding:4px 10px;font-size:10px">+ Añadir</button>
+          </div>
+          <div id="regionLandscapePreviews" class="wb-landscape-previews"></div>
+          <input type="file" id="regionLandscapeInput" accept="image/*" multiple hidden>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="button-secondary" id="cancelModalNewRegion">Cancelar</button>
+        <button class="button-main modal-save-btn" id="saveNewRegionBtn">¡CREAR REGIÓN!</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL · NUEVA LOCACIÓN -->
+  <div id="modalNewLocation" class="modal-overlay hidden">
+    <div class="modal-box modal-box-sm">
+      <div class="modal-header">
+        <h2 id="modalNewLocationTitle">Nueva Locación</h2>
+        <button class="modal-close" id="closeModalNewLocation">✕</button>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px;margin-top:8px">
+        <div
+          style="background:rgba(219,111,78,0.1);border:1px solid rgba(219,111,78,0.25);border-radius:10px;padding:8px 12px;font-size:12px;color:rgba(255,255,255,0.6)">
+          Locación dentro de: <span id="locationParentName" style="color:#db6f4e">Región</span>
+        </div>
+        <input id="locationName" type="text" placeholder="Nombre de la locación..." class="modal-input">
+        <div style="display:flex;align-items:center;gap:12px">
+          <label style="color:rgba(255,255,255,0.6);font-size:12px;white-space:nowrap">Color:</label>
+          <input type="color" id="locationColor" value="#db6f4e" class="modal-input"
+            style="width:46px;height:36px;padding:2px;border-radius:8px;cursor:pointer;flex-shrink:0">
+        </div>
+        <textarea id="locationDesc" placeholder="Descripción de esta locación..." class="modal-textarea"
+          rows="3"></textarea>
+        <div class="wb-icon-select-container">
+          <div class="wb-icon-select-label">Icono de locación</div>
+          <div class="wb-icon-grid" id="locationIconGrid">
+            <button class="wb-icon-btn selected" data-icon="📍">📍</button>
+            <button class="wb-icon-btn" data-icon="🏠">🏠</button>
+            <button class="wb-icon-btn" data-icon="⚒️">⚒️</button>
+            <button class="wb-icon-btn" data-icon="🌿">🌿</button>
+            <button class="wb-icon-btn" data-icon="💀">💀</button>
+            <button class="wb-icon-btn wb-custom-icon-btn" id="customLocationIconBtn">+ Subir</button>
+          </div>
+          <input type="file" id="locationIconInput" accept="image/*" hidden>
+        </div>
+        <div style="margin-top:12px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+            <span class="wb-icon-select-label">Paisajes de locación</span>
+            <button class="wb-mft-action-btn" id="addLocationLandscapeBtn"
+              style="width:auto;padding:4px 10px;font-size:10px">+ Añadir</button>
+          </div>
+          <div id="locationLandscapePreviews" class="wb-landscape-previews"></div>
+          <input type="file" id="locationLandscapeInput" accept="image/*" multiple hidden>
+        </div>
+      </div>
+      <div class="modal-footer" style="margin-top:14px">
+        <button class="button-secondary" id="cancelModalNewLocation">Cancelar</button>
+        <button class="button-main modal-save-btn" id="saveNewLocationBtn">¡CREAR LOCACIÓN!</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL · VER DETALLES DE FORMA (Card) -->
+  <div id="modalViewShape" class="modal-overlay hidden">
+    <div class="modal-box modal-box-shape-card">
+      
+      <!-- Premium Banner Header -->
+      <div id="viewShapeBanner" class="wb-modal-banner">
+        <div class="wb-modal-banner-overlay"></div>
+        <button class="modal-close" id="closeViewShape" style="top:15px;right:15px;z-index:10">✕</button>
+      </div>
+
+      <div class="modal-body-p-0">
+        
+        <!-- Identity Header -->
+        <div class="wb-modal-identity">
+          <div id="viewShapeIcon" class="wb-modal-pin-circle">⬡</div>
+          <div style="flex:1">
+            <h2 id="viewShapeName" class="wb-modal-title">Nombre</h2>
+            <div id="viewShapeType" class="wb-modal-type-badge">REGIÓN</div>
+          </div>
+        </div>
+
+        <div class="wb-modal-content-scroll">
+          
+          <!-- Descriptor Concept (Prominent) -->
+          <div id="viewShapeDescriptorSection" class="wb-modal-section hidden" style="margin-top:0px; margin-bottom: 20px;">
+            <div id="viewShapeDescriptor" class="wb-descriptor-main-card"></div>
+          </div>
+
+          <!-- Description -->
+          <div id="viewShapeDesc" class="wb-modal-description">Descripción...</div>
+
+          <!-- Internal Locations (Regions only) -->
+          <div id="viewShapeChildrenSection" class="wb-modal-section">
+            <div class="wb-modal-section-title">
+              <span class="icon">📍</span> LOCACIONES INTERNAS
+            </div>
+            <div id="viewShapeChildren" class="wb-modal-child-list"></div>
+          </div>
+
+          <!-- Landscapes (Carousel) -->
+          <div id="viewShapeLandscapesSection" class="wb-modal-section hidden">
+            <div class="wb-modal-section-header">
+              <div class="wb-modal-section-title">
+                <span class="icon">🖼️</span> PAISAJES
+              </div>
+              <button class="wb-modal-mini-add" id="viewShapeAddLandscapeBtn" title="Subir paisaje">+</button>
+            </div>
+            <div id="viewShapeCarousel" class="wb-modal-carousel"></div>
+            <input type="file" id="viewShapeLandscapeInput" accept="image/*" multiple hidden>
+          </div>
+
+          <!-- Related Concepts (Context) -->
+          <div id="viewShapeRelatedConceptsSection" class="wb-modal-section hidden">
+            <div class="wb-modal-section-title">
+              <span class="icon">📖</span> CONCEPTOS Y CONTEXTO
+            </div>
+            <div id="viewShapeRelatedConcepts" class="wb-modal-bubble-grid"></div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="modal-footer wb-modal-footer-glass">
+        <button class="wb-modal-footer-btn danger" id="deleteShapeBtn">🗑 Eliminar</button>
+        <button class="wb-modal-footer-btn secondary" id="moveLocationBtn" style="display:none">🔗 Mover</button>
+        <div style="flex:1"></div>
+        <button class="wb-modal-footer-btn primary" id="editShapeBtn">✏️ Editar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL · MOVER LOCACIÓN -->
+  <div id="modalMoveLocation" class="modal-overlay hidden">
+    <div class="modal-box modal-box-sm">
+      <div class="modal-header">
+        <h2 id="modalMoveLocationTitle">Mover Locación</h2>
+        <button class="modal-close" id="closeMoveLocationModal">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="color:rgba(255,255,255,0.6);font-family:'Etna';font-size:12px;margin-bottom:12px">
+          Selecciona la región de destino para <span id="moveLocationName" style="color:#db6f4e">la locación</span>.
+        </p>
+        <div id="moveLocationList" class="wb-region-selection-list" style="display:flex;flex-direction:column;gap:6px;max-height:200px;overflow-y:auto">
+          <!-- List generated via JS -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="button-secondary" id="cancelMoveLocation">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL · LIGHTBOX -->
+  <div id="modalLightbox" class="wb-lightbox hidden">
+    <button class="wb-lightbox-close" id="closeLightbox">✕</button>
+    <img id="lightboxImg" class="wb-lightbox-img" src="" alt="">
+  </div>
+
+  <!-- MODAL · SELECTOR LOCACIÓN (para bloque) -->
+  <div id="modalSelectLocation" class="modal-overlay hidden">
+    <div class="modal-box" style="max-width:700px;width:95vw">
+      <div class="modal-header">
+        <h2>Seleccionar Locación del Mapa</h2>
+        <button class="modal-close" id="closeModalSelectLocation">✕</button>
+      </div>
+      <p style="color:rgba(255,255,255,0.6);font-family:'Etna';font-size:12px;margin:0 0 12px">Haz clic en una región o
+        locación para asociarla a este bloque.</p>
+      <div style="position:relative;border-radius:12px;overflow:hidden;background:#1a0c2e">
+        <canvas id="locationPickerCanvas" style="width:100%;display:block;cursor:crosshair"></canvas>
+      </div>
+      <div id="locationPickerRegions"
+        style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;max-height:150px;overflow-y:auto;"></div>
+      <div class="modal-footer" style="margin-top:14px">
+        <button class="button-secondary" id="cancelModalSelectLocation">Cancelar</button>
+        <button class="button-main modal-save-btn" id="confirmLocationBtn">¡Seleccionar!</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL · PERSONALIZACIÓN DE BLOQUE -->
+  <div id="modalBlockSettings" class="modal-overlay hidden">
+    <div class="modal-box modal-box-sm">
+      <div class="modal-header">
+        <h2>Personalizar Bloque</h2>
+        <button class="modal-close" id="closeModalBlockSettings">✕</button>
+      </div>
+      <div class="modal-body" style="display:flex;flex-direction:column;gap:16px;margin-top:10px">
+        
+        <!-- Contenedor -->
+        <div class="modal-config-group">
+          <div class="wb-icon-select-label">CONTENEDOR</div>
+          <div class="modal-row" style="gap:10px">
+            <div style="flex:1">
+              <label class="wb-mft-section-label">Fondo</label>
+              <input type="color" id="bsBgColor" class="modal-input" style="height:38px;padding:4px;cursor:pointer">
+            </div>
+            <!-- Altura removed, now using dragger -->
+          </div>
+          <div style="margin-top:8px">
+            <label class="wb-mft-section-label">Espaciado (Padding)</label>
+            <input type="range" id="bsPadding" min="0" max="60" step="2" class="tool-slider" style="width:100%">
+          </div>
+        </div>
+
+        <!-- Texto -->
+        <div class="modal-config-group" id="bsTextGroup">
+          <div class="wb-icon-select-label">TEXTO</div>
+          <div class="modal-row" style="gap:10px">
+            <div style="flex:1">
+              <label class="wb-mft-section-label">Color</label>
+              <input type="color" id="bsTextColor" class="modal-input" style="height:38px;padding:4px;cursor:pointer">
+            </div>
+            <div style="flex:1">
+              <label class="wb-mft-section-label">Tamaño</label>
+              <input type="number" id="bsFontSize" class="modal-input" placeholder="px">
+            </div>
+          </div>
+          <div class="wb-text-style-tools" style="display:flex;gap:4px;margin-top:10px">
+            <button class="wb-style-btn" data-style="bold" title="Negrita"><b>B</b></button>
+            <button class="wb-style-btn" data-style="italic" title="Cursiva"><i>I</i></button>
+            <button class="wb-style-btn" data-style="underline" title="Subrayado"><u>U</u></button>
+            <div style="flex:1"></div>
+            <button class="wb-style-btn" data-align="left" title="Izquierda">⫷</button>
+            <button class="wb-style-btn" data-align="center" title="Centro">⫸⫷</button>
+            <button class="wb-style-btn" data-align="right" title="Derecha">⫸</button>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer" style="margin-top:14px">
+        <button class="button-secondary" id="cancelModalBlockSettings">Cancelar</button>
+        <button class="button-main" id="saveBlockSettingsBtn">Guardar cambios</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL · NUEVA RELACIÓN -->
+  <div id="modalNewRelation" class="modal-overlay hidden">
+    <div class="modal-box modal-box-sm">
+      <div class="modal-header">
+        <h2>Nueva Relación</h2>
+        <button class="modal-close" id="closeModalNewRelation">✕</button>
+      </div>
+      <div class="modal-body" style="display:flex;flex-direction:column;gap:16px;margin-top:10px">
+        <div>
+          <label class="wb-icon-select-label">CONCEPTO OBJETIVO</label>
+          <input type="text" id="relationSearchInput" class="modal-input" placeholder="Buscar concepto...">
+          <div id="relationSearchResults" class="wb-rel-search-results"></div>
+          <div id="relationSelectedTarget" class="wb-rel-selected-target" style="display:none"></div>
+        </div>
+        <div>
+          <label class="wb-icon-select-label">TIPO DE RELACIÓN</label>
+          <div class="wb-rel-type-grid" id="relationTypeGrid" style="max-height: 180px; overflow-y: auto; padding: 4px;"></div>
+        </div>
+        
+        <div style="display:grid; grid-template-columns: 1fr 120px; gap: 20px; background: rgba(255,255,255,0.03); padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
+          <div>
+            <label class="wb-icon-select-label" style="display: flex; justify-content: space-between;">INTENSIDAD <span id="intensityVal" style="color: #ab68ff">5</span></label>
+            <input type="range" id="relationIntensity" min="1" max="10" value="5" class="rk-range" style="width:100%; margin-top: 8px;">
+          </div>
+          <div style="display: flex; flex-direction: column; align-items: flex-end;">
+            <label class="wb-icon-select-label">¿ES SECRETO?</label>
+            <label class="rk-switch" style="margin-top: 8px;">
+              <input type="checkbox" id="relationSecret">
+              <span class="rk-switch-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div>
+          <label class="wb-icon-select-label">NOTAS (OPCIONAL)</label>
+          <textarea id="relationNotes" class="modal-textarea" rows="2" placeholder="Detalles sobre esta relación..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer" style="margin-top:14px">
+        <button class="button-secondary" id="cancelModalNewRelation">Cancelar</button>
+        <button class="button-main modal-save-btn" id="saveNewRelationBtn">¡Crear Relación!</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <script src="rk_core.js"></script>
+  <script src="rk_crop.js"></script>
+  <script src="rk_components.js"></script>
+  <script src="rk_tutorial.js"></script>
+  <script src="worldbuilding.js?v=20240412_final"></script>
+  <script src="reikanales.js"></script>
+
+</body>
+</html>

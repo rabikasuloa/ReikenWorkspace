@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Escena - Reiken</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="icons/ReikenIcon.png">
+</head>
+
+<body class="projects-body">
+  <div id="rk-bg"></div>
+
+  <!-- ══════════════════════════════
+     TOPBAR
+════════════════════════════════ -->
+  <header class="index-topbar" style="display:none">
+    <div class="index-topbar-container">
+      <span>REIKEN</span>
+      <div class="index-topbar-logo">
+        <img src="icons/ReikenIcon.png" alt="logo">
+      </div>
+      <span>STUDIOS</span>
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════
+     LAYOUT
+════════════════════════════════ -->
+  <div class="projects-layout">
+
+    <!-- ── SIDEBAR ─────────────────────────── -->
+    <aside class="sidebar" id="sidebar">
+      <button class="sidebar-toggle" id="sidebarToggle" title="Colapsar menú">
+        <img src="icons/iconos/flecha.png" alt="◀" id="sidebarArrowImg"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='inline'">
+        <span id="sidebarArrowFallback" style="display:none; font-size:18px; color:white;">◀</span>
+      </button>
+
+      <div class="sidebar-content" id="sidebarContent">
+        <div class="sidebar-recommendations">
+          <p class="sidebar-label">Recomendaciones:</p>
+        </div>
+
+        <div class="sidebar-bottom">
+          <div class="sidebar-divider"></div>
+
+          <div class="sidebar-shortcuts" id="shortcutList"></div>
+          <button class="sidebar-create-shortcut" id="createShortcutBtn">
+            <span class="sidebar-icon-circle sidebar-circle-add">+</span>
+            <span class="sidebar-item-label">Crear atajo</span>
+          </button>
+
+          <div class="sidebar-divider"></div>
+
+          <button class="sidebar-item">
+            <img src="icons/iconos/reikanales.png" alt="" class="sidebar-icon-img" onerror="this.style.display='none'">
+            <span class="sidebar-item-label">Reikanales</span>
+          </button>
+          <button class="sidebar-item">
+            <img src="icons/iconos/notificaciones.png" alt="" class="sidebar-icon-img"
+              onerror="this.style.display='none'">
+            <span class="sidebar-item-label">Notificaciones</span>
+          </button>
+          <button class="sidebar-item" id="appearanceBtn">
+            <img src="https://res.cloudinary.com/dyy6zbkop/image/upload/v1774987409/yawddbmuvgompilk4mar.png" alt=""
+              class="sidebar-icon-img" onerror="this.style.display='none'">
+            <span class="sidebar-item-label">Apariencia</span>
+          </button>
+          <button class="sidebar-item" id="configBtn">
+            <img src="icons/iconos/config.png" alt="" class="sidebar-icon-img" onerror="this.style.display='none'">
+            <span class="sidebar-item-label">Configuracion</span>
+          </button>
+
+          <div class="sidebar-divider"></div>
+
+          <button class="sidebar-item sidebar-profile" id="profileBtn">
+            <div class="sidebar-avatar">
+              <img id="sidebarAvatarImg" src="icons/Tu.png" alt="perfil">
+            </div>
+            <span class="sidebar-item-label sidebar-alias" id="sidebarAlias">Alias</span>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ── CONTENIDO PRINCIPAL ─────────────── -->
+    <main class="projects-main">
+      <div class="projects-header" style="flex-wrap: wrap; justify-content: flex-start; gap: 20px;">
+        <button class="ip-back-btn" id="backBtn" title="Volver a Storyboard"
+          style="background:transparent; border:none; cursor:pointer;">
+          <img src="icons/iconos/flecha.png" alt="←"
+            onerror="this.style.display='none';this.parentElement.textContent='←'"
+            style="transform:rotate(180deg);width:20px;height:20px;filter:brightness(0) invert(1);">
+        </button>
+        <h1 class="projects-title" id="sceneTitle" style="margin: 0; padding-right: 20px;">Cargando...</h1>
+        <button class="button-secondary" id="btnTutorialEscenaGrid" style="margin-left: auto; background:none; border:none; color:#db6f4e; text-decoration:underline; font-size:12px; cursor:pointer;">Tutorial</button>
+        <button class="button-secondary" id="btnAnimatica" style="margin-left: 10px; background:#db6f4e; border:none; color:white; border-radius: 8px; padding: 6px 12px; font-family:'Gliker'; cursor:pointer; font-size:13px; display:flex; align-items:center; gap:6px;">🎬 Animática</button>
+        <button class="projects-add-btn" id="addPanelBtn" title="Nuevo Panel"
+          style="margin-left: 10px;">+</button>
+      </div>
+
+      <!-- PANELES GRID (6 columnas) -->
+      <div id="panelsGrid" class="escena-panels-grid">
+        <div class="projects-empty" id="panelsEmpty" style="grid-column: 1 / -1; display:none;">
+          <p>Aún no hay paneles.<br>¡Crea el primero con el botón +!</p>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════
+         ENLARGED PANEL & DRAW (PREMIUM WORKSPACE)
+    ════════════════════════════════ -->
+      <div id="enlargedModal" class="enlarged-drawing-wrapper hidden">
+
+        <!-- Floating Tool Dock (Artist-Focused Overhaul) -->
+        <!-- Floating Tool Dock Left (Tools & Colors) -->
+        <div class="drawing-dock-left glass-panel">
+          <div class="brush-dropdown-wrapper">
+            <button class="tool-btn-float" id="brushDropdownBtn" title="Pinceles (B/N/M)">
+              <span id="brushDropdownLabel">Pincel</span>
+              <img src="icons/iconos/Dibujar.png" alt="Brush" style="width:20px; height:20px; object-fit:contain; filter:brightness(0) invert(1);">
+            </button>
+            <div id="brushDropdownMenu" class="brush-dropdown-menu hidden" style="left: 60px; top: -20px;">
+              <button class="brush-opt-btn active" data-tool="brush" title="Pincel Estándar (B)">
+                <span>Pincel (B)</span>
+                <canvas class="brush-preview-cvs" width="80" height="24"></canvas>
+              </button>
+              <button class="brush-opt-btn" data-tool="pencil" title="Lápiz (N)">
+                <span>Lápiz (N)</span>
+                <canvas class="brush-preview-cvs" width="80" height="24"></canvas>
+              </button>
+              <button class="brush-opt-btn" data-tool="marker" title="Marcador (M)">
+                <span>Marcador (M)</span>
+                <canvas class="brush-preview-cvs" width="80" height="24"></canvas>
+              </button>
+            </div>
+          </div>
+          <button class="tool-btn-float" id="toolEraser" title="Borrador (E)">
+            <img src="icons/iconos/Borrador.png" alt="Eraser" style="width:20px; height:20px; object-fit:contain; filter:brightness(0) invert(1);">
+          </button>
+
+          <div class="section-divider-h"></div>
+
+          <button class="tool-btn-float" id="toolLasso" title="Lazo (L)">
+            <img src="icons/iconos/Lazo.png" alt="Lasso" style="width:20px; height:20px; object-fit:contain; filter:brightness(0) invert(1);">
+          </button>
+          <button class="tool-btn-float" id="toolRectSelect" title="Rect. (S)">
+            <img src="icons/iconos/Seleccion.png" alt="Rect Select" style="width:20px; height:20px; object-fit:contain; filter:brightness(0) invert(1);">
+          </button>
+          <button class="tool-btn-float" id="toolMove" title="Mover (V)">✥</button>
+          <button class="tool-btn-float" id="toolEyedropper" title="Cuentagotas (I)">
+            <img src="icons/iconos/Cuentagotas.png" alt="Eyedropper" style="width:20px; height:20px; object-fit:contain; filter:brightness(0) invert(1);">
+          </button>
+
+          <div class="section-divider-h"></div>
+
+          <div class="color-wrap-float" title="Color de Tinta">
+            <input type="color" id="toolColor" value="#000000">
+          </div>
+          <div class="color-wrap-float" title="Fondo del Lienzo">
+            <input type="color" id="canvasBgColor" value="#210f37">
+          </div>
+          
+          <div class="color-palette-mini" id="colorPaletteMini" title="Paleta Rápida" style="margin-left:0; margin-top:5px;">
+            <div class="palette-saved" id="paletteSaved" style="flex-wrap:wrap; width: 36px; justify-content:center;"></div>
+            <div class="palette-recent" id="paletteRecent" style="flex-wrap:wrap; width: 36px; justify-content:center; margin-top:4px;"></div>
+          </div>
+        </div>
+
+        <!-- Floating Tool Dock Top (Stroke Settings & View) -->
+        <div class="drawing-dock-top glass-panel">
+          <div class="control-item-row">
+            <label>Grosor</label>
+            <input type="range" id="toolSize" min="1" max="100" value="5" class="tool-slider">
+            <span id="sizeVal" class="val-label">5px</span>
+          </div>
+          <div class="control-item-row">
+            <label>Opacidad</label>
+            <input type="range" id="toolOpacity" min="1" max="100" value="100" class="tool-slider">
+            <span id="opacityVal" class="val-label">100%</span>
+          </div>
+          <div class="control-item-row">
+            <label>Estabilizar</label>
+            <input type="range" id="toolStabilizer" min="1" max="40" value="10" class="tool-slider">
+            <span id="stabilizerVal" class="val-label">10</span>
+          </div>
+
+          <div class="section-divider-v"></div>
+
+          <button class="tool-btn-text" id="toolFlipCanvas" title="Voltear (H)">🪞 Flip</button>
+          <button class="tool-btn-text" id="toolRotateCW" title="Rotar 90° → (R)">↻ 90°</button>
+          <button class="tool-btn-text" id="toolRotateCCW" title="Rotar 90° ← (⇧+R)">↺ 90°</button>
+          <button class="tool-btn-text" id="toggleOnionSkinBtn" title="Papel Cebolla (O)">🧅 Cebolla</button>
+          <button class="tool-btn-text" id="toggleLayersBtn" title="Capas (F7)">📚 Capas</button>
+          <button class="tool-btn-text" id="toggleRefBoardBtn" title="Referencias">🖼️ Refs</button>
+        </div>
+
+        <!-- Floating Tool Dock Right (File & Actions) -->
+        <div class="drawing-dock-right glass-panel">
+          <button class="tool-btn-text" id="btnTutorialEscenaCanvas" title="Tutorial" style="padding: 6px 10px;">❓</button>
+          <button class="tool-btn-text" id="shortcutSettingsBtn" title="Configurar Atajos" style="padding: 6px 10px;">⚙️</button>
+          <button class="tool-btn-text save" id="saveDrawingBtn" title="Guardar (Ctrl+S)">GUARDAR</button>
+          <div class="save-indicator" id="saveIndicator" title="Estado de guardado"></div>
+          <button class="tool-btn-text close" id="closeDrawingBtn" title="Cerrar espacio">✖ CERRAR</button>
+        </div>
+
+        <!-- Selection Actions Bar (contextual, hidden by default) -->
+        <div class="selection-actions-bar hidden" id="selectionActionsBar">
+          <button class="sel-action-btn" id="selCopy" title="Copiar (Ctrl+C)">📋 Copiar</button>
+          <button class="sel-action-btn" id="selCut" title="Cortar (Ctrl+X)">✂️ Cortar</button>
+          <button class="sel-action-btn" id="selPaste" title="Pegar (Ctrl+V)">📌 Pegar</button>
+          <button class="sel-action-btn" id="selDelete" title="Eliminar (Del)">🗑️ Borrar</button>
+          <button class="sel-action-btn" id="selDeselect" title="Deseleccionar (Ctrl+D)">✖ Deseleccionar</button>
+        </div>
+
+
+        <div class="drawing-canvas-container" id="drawingContainer">
+          <!-- Canvas Layers -->
+          <div id="canvasZoomWorld" style="display:inline-block; position:relative; transform-origin:top left;">
+            <canvas id="onionSkinCanvas" style="position:absolute; inset:0; opacity: 0.35; pointer-events: none; z-index: 999; mix-blend-mode: multiply; display:none;"></canvas>
+            <div id="layersContainer" style="position:absolute; inset:0;"></div>
+            <canvas id="cursorCanvas" style="z-index: 1000; position:absolute; top:0; left:0; touch-action: none; outline: none;"></canvas>
+            <div id="dialoguesLayer" class="dialogues-layer" style="z-index: 1001; position:absolute; top:0; left:0;">
+            </div>
+            <div id="canvasDialogueFooter" class="canvas-dialogue-footer"></div>
+          </div>
+        </div>
+
+        <!-- Shortcuts Settings Modal (New) -->
+        <div id="shortcutModal" class="shortcut-modal hidden">
+          <div class="shortcut-modal-header">
+            <h3>ATAJOS DE TECLADO</h3>
+            <button class="tool-btn action-btn close" id="closeShortcutModal">X</button>
+          </div>
+          <div class="shortcut-list" id="shortcutListContainer">
+            <!-- Dynamically populated -->
+          </div>
+          <p style="font-size: 10px; color: rgba(255,255,255,0.4); margin-top: 20px; text-align: center;">
+            Haz clic en una tecla para reasignarla.
+          </p>
+        </div>
+
+        <!-- Layers Manager Float Window -->
+        <div id="layersManager" class="layers-manager hidden">
+          <div class="layers-manager-header">
+            <span style="letter-spacing: 1px;">GESTOR DE CAPAS</span>
+            <button id="addLayerBtn" class="tool-btn"
+              style="padding: 2px 8px; font-size:11px; background:#db6f4e; color:white;">+ NUEVA</button>
+          </div>
+          <div class="layers-manager-list" id="layersList" style="padding: 10px; overflow-y:auto; flex:1;"></div>
+        </div>
+
+        <!-- Quick Dialogue Bar (New) -->
+        <div class="quick-dialog-bar" id="quickDialogBar">
+          <button class="qd-char-picker-btn" id="qdCharBtn" title="Seleccionar personaje">
+            <img src="https://res.cloudinary.com/dyy6zbkop/image/upload/v1774987836/yx0jtu7jte38qbqwsy68.png" alt="C"
+              id="qdCharImg">
+          </button>
+          <div class="qd-input-wrap">
+            <input type="text" class="qd-input" id="qdInput" placeholder="Escribe el diálogo aquí...">
+            <div id="qdCharDropdown" class="qd-char-dropdown hidden"></div>
+          </div>
+          <button class="qd-add-btn" id="qdAddBtn" title="Añadir diálogo (Enter)">+</button>
+        </div>
+
+        <!-- ── CO-PRESENCE AVATARS ── -->
+        <div class="presence-container" id="presenceContainer">
+          <!-- Dynamically populated overlapping avatars -->
+        </div>
+
+        <!-- ── REFERENCE BOARD WINDOW ── -->
+        <div id="refBoardWindow" class="ref-board-window hidden">
+          <div class="ref-header" id="refBoardHeader">
+            <div class="ref-tabs">
+              <button class="ref-tab active" data-type="individual">Individual</button>
+              <button class="ref-tab" data-type="shared">Compartido</button>
+            </div>
+            <button class="tool-btn action-btn close" id="closeRefBoardBtn">✕</button>
+          </div>
+          <div class="ref-toolbar">
+            <button class="ref-tool-btn active" id="refModeView">👁️ Ver</button>
+            <button class="ref-tool-btn" id="refModeEdit">✏️ Editar</button>
+            <div class="section-divider-v"></div>
+            <button class="ref-tool-btn" id="refAddImgBtn">➕ Imagen</button>
+            <button class="ref-tool-btn" id="refAutoPackBtn" title="Alinear Imágenes" style="margin-left:auto;">🗂️ Organizar</button>
+            <input type="file" id="refFileInput" accept="image/*" multiple hidden>
+          </div>
+          <div class="ref-body" id="refBoardBody">
+            <div class="ref-canvas-wrapper" id="refCanvasWrapper">
+              <!-- Images will be appended here -->
+            </div>
+          </div>
+          <div class="ref-resizer"></div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- Panel Duration Modal (New) -->
+  <div id="durationModal" class="duration-modal hidden">
+    <h3>DURACIÓN DEL PANEL</h3>
+    <div class="duration-input-wrap">
+      <input type="number" id="durationInput" class="duration-input" step="0.1" min="0.1" value="1.0">
+      <span style="font-size: 20px; color: rgba(255,255,255,0.5);">SEG</span>
+    </div>
+    <div class="duration-modal-btns">
+      <button class="btn-cancel-duration" id="btnCancelDuration">CANCELAR</button>
+      <button class="btn-save-duration" id="btnSaveDuration">GUARDAR</button>
+    </div>
+  </div>
+  <!-- Voice-Over Modal (New) -->
+  <div id="voiceModal" class="voice-modal hidden">
+    <h3>VOICE OVER</h3>
+    <div id="voStatus" style="font-size: 13px; margin-bottom: 5px; color: rgba(255,255,255,0.7);">Carga un audio o graba uno nuevo</div>
+    <button class="vo-record-btn" id="voRecordBtn">●</button>
+    <div id="voTimer" style="font-size: 14px; margin-bottom: 10px; opacity: 0.6;">00:00</div>
+    
+    <label class="vo-import-label" for="voImportInput">
+      O importar archivo .mp3 / .wav
+      <input type="file" id="voImportInput" accept="audio/*" style="display:none;">
+    </label>
+
+    <audio id="voPreview" class="vo-preview-player" controls style="display:none;"></audio>
+    
+    <div class="duration-modal-btns" style="margin-top:20px;">
+      <button class="btn-cancel-duration" id="voCancelBtn">CANCELAR</button>
+      <button class="btn-save-duration" id="voSaveBtn">GUARDAR</button>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <script>
+    window.__yjsPromise = import('./lib/yjs.mjs')
+      .then(mod => { window.Y = mod; })
+      .catch(async e => {
+        console.warn('[Yjs] local load failed, trying CDN fallback:', e.message);
+        window.__yjsPromise = import('https://cdn.jsdelivr.net/npm/yjs@13.6.31/+esm')
+          .then(mod => { window.Y = mod; })
+          .catch(e2 => { console.error('[Yjs] CDN fallback also failed:', e2.message); });
+      });
+  </script>
+  <script src="rk_core.js"></script>
+  <script src="rk_components.js"></script>
+  <script src="rk_sync.js"></script>
+  <script src="rk_reference.js"></script>
+  <script src="rk_tutorial.js"></script>
+
+  <script src="escena.js"></script>
+  <script src="reikanales.js"></script>
+</body>
+
+</html>

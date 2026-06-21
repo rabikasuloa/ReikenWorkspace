@@ -1,0 +1,19 @@
+[
+  {
+    "id": "reiken-workspace",
+    "name": "Reiken Workspace",
+    "category": "Producción & Arte",
+    "currentVersion": "1.2.0",
+    "downloadUrl": "https://github.com/rabikasuloa/ReikenWorkspace/releases/download/v1.2.0/Reiken.Workspace_1.2.0_x64_en-US.msi",
+    "executable": "Reiken Workspace.exe",
+    "logo": "https://res.cloudinary.com/dyy6zbkop/image/upload/v1774918492/bqy6anncltiqszuimuso.png",
+    "banner": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1280&auto=format&fit=crop",
+    "description": "El centro de producción definitivo para el diseño de mundos (WorldBuilding) y storyboards de nivel profesional con herramientas optimizadas para tabletas gráficas.",
+    "changelog": [
+      "✨ Solucionado el bug de Ctrl+Z con el borrador activo.",
+      "🎨 Paleta de colores rápidos personalizable (12 slots) y colores recientes en toolbar.",
+      "✂️ Herramientas de selección de lazo y rectangular con animación marching ants.",
+      "⚡ Estabilizador de trazo optimizado para altas velocidades de dibujo (sin líneas duras)."
+    ]
+  }
+]

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reiken Workspace</title>
+  <link rel="icon" href="icons/ReikenIcon.png" type="img">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- =========================
+       TOPBAR
+  ========================== -->
+  <header class="index-topbar">
+    <div class="index-topbar-container">
+      <span class="index-topbar-text-left">REIKEN</span>
+
+      <div class="index-topbar-logo">
+        <img src="icons/ReikenIcon.png" alt="logo">
+      </div>
+
+      <span class="index-topbar-text-right">STUDIOS</span>
+    </div>
+  </header>
+
+
+  <!-- =========================
+       BACKGROUND
+  ========================== -->
+  <main class="index-background">
+
+    <!-- =========================
+         CARD CENTRAL
+    ========================== -->
+    <section class="index-card">
+
+      <!-- LOGO PRINCIPAL -->
+      <div class="index-card-logo">
+        <img src="icons/ReikenStudios.png" alt="logo principal">
+      </div>
+
+      <!-- TEXTO -->
+      <div class="index-card-text">
+
+        <h2 class="index-title">
+          ¡Bienvenido a REIKEN WORKSPACE!
+        </h2>
+
+        <p class="index-description">
+          Sitio oficial del estudio para el desarrollo organizado de 
+          proyectos de animación independiente.
+        </p>
+
+      </div>
+
+      <!-- BOTONES -->
+      <div class="index-card-buttons">
+
+        <button id="loginBtn" class="button-index-iniciosesion" onclick="window.location.href='login.html'">
+          Iniciar Sesión
+        </button>
+
+        <button id="registerBtn" class="button-index-registro" onclick="window.location.href='register.html'">
+          Registro
+        </button>
+
+      </div>
+
+    </section>
+
+  </main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+<script src="rk_core.js"></script>
+</body>
+</html>

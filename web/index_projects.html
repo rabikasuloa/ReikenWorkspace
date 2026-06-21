@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Proyecto - Reiken</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="index_project.css">
+  <link rel="icon" href="icons/ReikenIcon.png">
+</head>
+<body class="projects-body">
+<div id="rk-bg"></div>
+
+<!-- ══════════════════════════════
+     TOPBAR
+════════════════════════════════ -->
+<header class="index-topbar">
+  <div class="index-topbar-container">
+    <span>REIKEN</span>
+    <div class="index-topbar-logo">
+      <img src="icons/ReikenIcon.png" alt="logo">
+    </div>
+    <span>STUDIOS</span>
+  </div>
+</header>
+
+<!-- ══════════════════════════════
+     LAYOUT
+════════════════════════════════ -->
+<div class="projects-layout">
+
+  <!-- ── SIDEBAR (igual que projects.html) ── -->
+  <aside class="sidebar" id="sidebar">
+    <button class="sidebar-toggle" id="sidebarToggle" title="Colapsar menú">
+      <img src="icons/iconos/flecha.png" alt="◀" id="sidebarArrowImg"
+           onerror="this.style.display='none'; this.nextElementSibling.style.display='inline'">
+      <span id="sidebarArrowFallback" style="display:none;font-size:18px;color:white;">◀</span>
+    </button>
+
+    <div class="sidebar-content">
+      <div class="sidebar-recommendations">
+        <p class="sidebar-label">Recomendaciones:</p>
+      </div>
+
+      <div class="sidebar-bottom">
+        <div class="sidebar-divider"></div>
+        <div class="sidebar-shortcuts" id="shortcutList"></div>
+        <button class="sidebar-create-shortcut" id="createShortcutBtn">
+          <span class="sidebar-icon-circle sidebar-circle-add">+</span>
+          <span class="sidebar-item-label">Crear atajo</span>
+        </button>
+        <div class="sidebar-divider"></div>
+
+        <button class="sidebar-item" id="btnLunaChat">
+          <img src="icons/iconos/Luna.png" alt="" class="sidebar-icon-img" onerror="this.style.display='none'">
+          <span class="sidebar-item-label">Luna</span>
+        </button>
+        <button class="sidebar-item">
+          <img src="icons/iconos/reikanales.png" alt="" class="sidebar-icon-img" onerror="this.style.display='none'">
+          <span class="sidebar-item-label">Reikanales</span>
+        </button>
+        <div class="sidebar-item-wrap">
+          <button class="sidebar-item" id="btnNotificaciones">
+            <img src="icons/iconos/notificaciones.png" alt="" class="sidebar-icon-img" onerror="this.style.display='none'">
+            <span class="sidebar-item-label">Notificaciones</span>
+          </button>
+          <div id="notiDot" class="noti-dot hidden"></div>
+        </div>
+        
+
+
+        <button class="sidebar-item" id="appearanceBtn">
+          <img src="https://res.cloudinary.com/dyy6zbkop/image/upload/v1774987409/yawddbmuvgompilk4mar.png" alt="" class="sidebar-icon-img" onerror="this.style.display='none'">
+          <span class="sidebar-item-label">Apariencia</span>
+        </button>
+        <button class="sidebar-item" id="configBtn">
+          <img src="icons/iconos/config.png" alt="" class="sidebar-icon-img" onerror="this.style.display='none'">
+          <span class="sidebar-item-label">Configuracion</span>
+        </button>
+        <button class="sidebar-item hidden" id="updateBtn" style="background: rgba(219, 111, 78, 0.12); border-left: 3px solid #db6f4e;">
+          <span class="sidebar-icon-circle" style="background: #db6f4e; font-size: 10px; color: white; display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; border-radius: 50%;">✨</span>
+          <span class="sidebar-item-label" style="color: #db6f4e; font-weight: bold;">Actualización</span>
+        </button>
+
+        <div class="sidebar-divider"></div>
+        <button class="sidebar-item sidebar-profile" id="profileBtn">
+          <div class="sidebar-avatar">
+            <img id="sidebarAvatarImg" src="icons/Tu.png" alt="perfil">
+          </div>
+          <span class="sidebar-item-label sidebar-alias" id="sidebarAlias">Alias</span>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ── ÁREA PRINCIPAL ─────────────────── -->
+  <div class="ip-main">
+
+    <!-- CABECERA DEL PROYECTO -->
+    <div class="ip-header">
+      <button class="ip-back-btn" id="backBtn" title="Volver a proyectos">
+        <img src="icons/iconos/flecha.png" alt="←"
+             onerror="this.style.display='none';this.parentElement.textContent='←'"
+             style="transform:rotate(180deg);width:20px;height:20px;filter:brightness(0) invert(1)">
+      </button>
+
+      <h1 class="ip-project-title" id="ipProjectTitle">Cargando...</h1>
+
+      <div class="ip-project-icon">
+        <img id="ipProjectIcon" src="" alt="icono">
+      </div>
+    </div>
+
+    <!-- BARRA DE BIENVENIDA -->
+    <div class="ip-welcome-bar">
+      <p class="ip-welcome-text" id="ipWelcomeText">¿Qué queremos hacer hoy?</p>
+      <div class="ip-welcome-user">
+        <span class="ip-welcome-alias" id="ipWelcomeAlias">Alias</span>
+        <div class="ip-welcome-avatar">
+          <img id="ipWelcomeAvatarImg" src="icons/Tu.png" alt="avatar">
+        </div>
+      </div>
+    </div>
+
+    <!-- COLUMNAS DE SECCIONES -->
+    <div class="ip-sections-area" id="ipSectionsArea">
+
+      <!-- STORYBOARDING -->
+      <div class="ip-section-col" id="colStoryboarding" data-tipo="storyboarding">
+        <div class="ip-section-col-header">
+          <h2 class="ip-section-title">Storyboarding</h2>
+          <div style="display:flex; gap:6px;">
+            <button class="ip-col-collapse-btn" id="btnExportSB" title="Exportar toda la sección de Storyboarding">📤</button>
+            <button class="ip-col-collapse-btn" id="btnImportSB" title="Importar Storyboarding (.json)">📥</button>
+            <button class="ip-col-collapse-btn" data-target="colStoryboarding" title="Colapsar">⟨</button>
+          </div>
+          <input type="file" id="importSBInput" accept=".json" style="display:none">
+        </div>
+        <div class="ip-section-col-body" id="bodyStoryboarding">
+          <div class="ip-section-empty" id="emptyStoryboarding">
+            <p>Sin storyboards aún.</p>
+          </div>
+          <!-- Cards de storyboards se renderizan aquí -->
+        </div>
+        <button class="ip-nuevo-btn" id="btnNuevoStoryboard">Nuevo Storyboard +</button>
+      </div>
+
+      <!-- SEPARADOR ARRASTRABLE -->
+      <div class="ip-col-divider" id="colDivider">
+        <div class="ip-divider-handle"></div>
+        <div class="ip-divider-handle"></div>
+      </div>
+
+      <!-- WORLDBUILDING -->
+      <div class="ip-section-col" id="colWorldbuilding" data-tipo="worldbuilding">
+        <div class="ip-section-col-header">
+          <h2 class="ip-section-title">WorldBuilding</h2>
+          <div style="display:flex; gap:6px;">
+            <button class="ip-col-collapse-btn" id="btnExportWB" title="Exportar toda la sección de Worldbuilding">📤</button>
+            <button class="ip-col-collapse-btn" id="btnImportWB" title="Importar Worldbuilding (.json)">📥</button>
+            <button class="ip-col-collapse-btn" data-target="colWorldbuilding" title="Colapsar">⟩</button>
+          </div>
+          <input type="file" id="importWBInput" accept=".json" style="display:none">
+        </div>
+        <div class="ip-section-col-body" id="bodyWorldbuilding">
+          <div class="ip-section-empty" id="emptyWorldbuilding">
+            <p>Sin worlds aún.</p>
+          </div>
+          <!-- Cards de conceptos se renderizan aquí -->
+        </div>
+        <button class="ip-nuevo-btn" id="btnNuevoConcepto">Nuevo World +</button>
+      </div>
+
+      <!-- SEPARADOR ARRASTRABLE 2 -->
+      <div class="ip-col-divider" id="colDivider2" style="display: none !important;">
+        <div class="ip-divider-handle"></div>
+        <div class="ip-divider-handle"></div>
+      </div>
+
+      <!-- PLANIFICACIÓN -->
+      <div class="ip-section-col" id="colPlanning" data-tipo="planning" style="display: none !important;">
+        <div class="ip-section-col-header">
+          <h2 class="ip-section-title">Planificación</h2>
+          <div style="display:flex; gap:6px;">
+            <button class="ip-col-collapse-btn" data-target="colPlanning" title="Colapsar">⟩</button>
+          </div>
+        </div>
+        <div class="ip-section-col-body" id="bodyPlanning">
+          <div class="ip-section-empty" id="emptyPlanning">
+            <p>Sin temporadas aún.</p>
+          </div>
+          <!-- Cards de temporadas se renderizan aquí -->
+        </div>
+        <button class="ip-nuevo-btn" id="btnNuevaTemporada">Nueva Temporada +</button>
+      </div>
+
+    </div><!-- fin ip-sections-area -->
+  </div><!-- fin ip-main -->
+
+  <!-- ── PANEL DERECHO (árbol de conceptos) ── -->
+  <aside class="ip-right-panel" id="ipRightPanel">
+    <div class="ip-rp-header">
+      <span class="wb-explorer-title">EXPLORADOR</span>
+      <div style="display:flex;gap:4px;align-items:center">
+        <button class="ip-rp-expand-btn" id="rpExpandBtn" title="Ampliar panel">↗</button>
+      </div>
+    </div>
+    <div class="wb-explorer-search-wrap">
+      <img class="ip-rp-search-icon" src="https://res.cloudinary.com/dyy6zbkop/image/upload/v1774918493/zrbzq0xqjqo4lfpxapuz.png" alt="buscar">
+      <input type="text" id="ipSearch" class="ip-rp-search" placeholder="Buscar concepto...">
+    </div>
+
+    <div class="ip-rp-tree" id="ipConceptTree">
+      <!-- Árbol de conceptos se construye dinámicamente -->
+      <p class="ip-rp-empty">Sin conceptos aún.</p>
+    </div>
+  </aside>
+
+</div><!-- fin projects-layout -->
+
+<!-- ══════════════════════════════
+     MODAL · NUEVO STORYBOARD (Storyboarding)
+════════════════════════════════ -->
+<div id="modalNuevaEscena" class="modal-overlay hidden">
+  <div class="modal-box modal-box-sm">
+    <div class="modal-header">
+      <h2>Nuevo Storyboard</h2>
+      <button class="modal-close" id="closeModalEscena">✕</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px;margin-top:8px">
+      <input id="escenaTitulo" type="text" placeholder="Título de la escena..." class="modal-input">
+      <textarea id="escenaDesc" placeholder="Descripción (opcional)..." class="modal-textarea" rows="3"></textarea>
+
+      <div class="modal-file-box" id="escenaBannerBox" title="Subir banner/thumbnail">
+        <div class="modal-file-left">
+          <div class="modal-file-thumb">
+            <img id="escenaBannerPreview" src="" alt="banner">
+          </div>
+          <div class="modal-file-meta">
+            <p class="modal-file-title">Banner / thumbnail</p>
+            <p class="modal-file-hint" id="escenaBannerHint">Haz clic para subir imagen (opcional)</p>
+          </div>
+        </div>
+        <div class="modal-file-action">+</div>
+      </div>
+      <input id="escenaBanner" type="file" accept="image/*" hidden>
+    </div>
+    <div class="modal-footer" style="margin-top:16px">
+      <button class="button-secondary" id="cancelModalEscena">Cancelar</button>
+      <button class="button-main modal-save-btn" id="saveEscenaBtn">¡HECHO!</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     MODAL · NUEVO WORLD (WorldBuilding)
+════════════════════════════════ -->
+<div id="modalNuevoConcepto" class="modal-overlay hidden">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h2>Nuevo World</h2>
+      <button class="modal-close" id="closeModalConcepto">✕</button>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:14px;margin-top:8px">
+
+      <!-- Ícono del concepto -->
+      <div style="display:flex;align-items:center;gap:14px">
+        <div class="modal-icon-box" id="conceptoIconBox" title="Subir ícono">
+          <img id="conceptoIconPreview" src="" alt="">
+          <span class="modal-icon-hint">+</span>
+        </div>
+        <input id="conceptoTitulo" type="text" placeholder="Nombre del concepto..." class="modal-input" style="flex:1">
+      </div>
+      <input type="file" id="conceptoIconInput" accept="image/*" hidden>
+
+      <textarea id="worldDesc" placeholder="Descripción (opcional)..." class="modal-textarea" rows="3"></textarea>
+      <div class="modal-file-box" id="worldBannerBox" title="Subir banner del world">
+        <div class="modal-file-left">
+          <div class="modal-file-thumb">
+            <img id="worldBannerPreview" src="" alt="banner">
+          </div>
+          <div class="modal-file-meta">
+            <p class="modal-file-title">Banner del world</p>
+            <p class="modal-file-hint" id="worldBannerHint">Haz clic para subir imagen (opcional)</p>
+          </div>
+        </div>
+        <div class="modal-file-action">+</div>
+      </div>
+      <input id="worldBanner" type="file" accept="image/*" hidden>
+
+    </div>
+
+    <div class="modal-footer" style="margin-top:16px">
+      <button class="button-secondary" id="cancelModalConcepto">Cancelar</button>
+      <button class="button-main modal-save-btn" id="saveConceptoBtn">¡HECHO!</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     MODAL · NUEVA TEMPORADA (Planificación)
+════════════════════════════════ -->
+<div id="modalNuevaTemporada" class="modal-overlay hidden">
+  <div class="modal-box modal-box-sm">
+    <div class="modal-header">
+      <h2 id="modalSeasonTitleText">Nueva Temporada</h2>
+      <button class="modal-close" id="closeModalSeason">✕</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px;margin-top:8px">
+      <input id="seasonTitle" type="text" placeholder="Título de la temporada (ej. Temporada 1)..." class="modal-input">
+      <textarea id="seasonDesc" placeholder="Descripción corta (opcional)..." class="modal-textarea" rows="3"></textarea>
+    </div>
+    <div class="modal-footer" style="margin-top:16px; justify-content:space-between">
+      <button class="button-delete hidden" id="deleteSeasonBtn">🗑 Eliminar</button>
+      <div style="display:flex; gap:10px; margin-left:auto;">
+        <button class="button-secondary" id="cancelModalSeason">Cancelar</button>
+        <button class="button-main modal-save-btn" id="saveSeasonBtn">¡HECHO!</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modales reutilizados de projects -->
+
+<!-- ── PANEL DE NOTIFICACIONES (Anuncios) ── -->
+<div id="panelNotificaciones" class="ip-noti-panel hidden">
+  <div class="ip-noti-header">
+    <h3>Anuncios</h3>
+    <button class="modal-close" style="background:none;border:none;color:white;cursor:pointer" id="closeNotiPanel">✕</button>
+  </div>
+  <div class="ip-noti-list" id="listaNotificaciones">
+    <p style="text-align:center;color:rgba(255,255,255,0.3);padding:20px;font-size:0.9rem">No hay anuncios nuevos ✨</p>
+  </div>
+
+  <button class="ip-publish-btn hidden" id="btnAbrirPublicar" style="margin: 12px; font-size: 0.9rem; padding: 10px;">
+    <span>📢</span>
+    <span>Publicar Anuncio</span>
+  </button>
+  <div class="ip-noti-resize" id="notiResize"></div>
+</div>
+
+
+
+<!-- ══════════════════════════════
+     MODAL · PUBLICAR ANUNCIO (CEO ONLY)
+     ════════════════════════════════ -->
+<div id="modalPublicarAnuncio" class="modal-overlay hidden">
+  <div class="modal-box modal-box-sm">
+    <div class="modal-header">
+      <h2>Publicar Anuncio</h2>
+      <button class="modal-close" id="closeModalAnuncio">✕</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px;margin-top:8px">
+      <p style="color:rgba(255,255,255,0.6);font-size:0.85rem">Escribe un mensaje para todo el equipo. Les llegará una notificación en tiempo real.</p>
+      <textarea id="anuncioTexto" placeholder="Escribe aquí tu anuncio..." class="modal-textarea" rows="5" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:white;padding:12px;border-radius:10px;resize:none"></textarea>
+      <div style="display:flex; justify-content:space-between; align-items:center">
+        <button class="ip-sticker-btn" id="btnStickerAnuncio" style="background:rgba(255,255,255,0.1);border:none;border-radius:8px;color:white;padding:6px 12px;cursor:pointer;font-size:0.8rem">🎞️ Sticker</button>
+      </div>
+    </div>
+
+    <div class="modal-footer" style="margin-top:16px">
+      <button class="button-secondary" id="cancelModalAnuncio">Cancelar</button>
+      <button class="button-main" id="enviarAnuncioBtn">¡PUBLICAR!</button>
+    </div>
+</div>
+</div>
+
+<!-- PANEL DE STICKERS (Compartido para Anuncios/Comentarios) -->
+<div id="ipStickerPanel" class="ip-sticker-panel hidden">
+  <div class="ip-sp-header">
+    <span>Elegir Sticker</span>
+    <button id="closeIpSticker">✕</button>
+  </div>
+  <div class="ip-sp-grid" id="ipStickerGrid"></div>
+</div>
+
+
+
+
+
+
+<!-- ══════════════════════════════
+     MODAL · ACTUALIZACIÓN DE APP (Auto-Updater)
+     ════════════════════════════════ -->
+<div id="modalActualizacion" class="modal-overlay hidden" style="z-index: 10000;">
+  <div class="modal-box modal-box-sm" style="max-width: 420px; background: rgba(30, 12, 42, 0.98); border: 1px solid #db6f4e; box-shadow: 0 20px 60px rgba(0,0,0,0.85);">
+    <div class="modal-header">
+      <h2 style="color: #db6f4e; font-family: 'Gliker', serif; letter-spacing: 1px; margin:0; font-size:1.3rem;">✨ Nueva Actualización</h2>
+      <button class="modal-close" id="closeModalUpdate">✕</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px;margin-top:14px">
+      <p style="color:rgba(255,255,255,0.85);font-size:0.9rem;margin:0;">
+        ¡Hay una nueva versión de <strong>Reiken Workspace</strong> disponible!
+      </p>
+      <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 12px; font-size: 0.85rem; color: rgba(255,255,255,0.65); max-height: 120px; overflow-y: auto;">
+        <strong style="color: #db6f4e; display: block; margin-bottom: 4px;" id="updateVersionTitle">Versión v1.1.0</strong>
+        <p id="updateNotes" style="margin: 0; line-height: 1.4; white-space: pre-line;">Mejoras de rendimiento y herramientas premium de dibujo.</p>
+      </div>
+
+      <!-- Progress bar, hidden initially -->
+      <div id="updateProgressContainer" class="hidden" style="margin-top: 8px;">
+        <p style="font-size: 0.8rem; color: rgba(255,255,255,0.5); margin: 0 0 6px 0; display: flex; justify-content: space-between;">
+          <span>Descargando archivos...</span>
+          <span id="updatePercentLabel">0%</span>
+        </p>
+        <div style="background: rgba(255,255,255,0.1); border-radius: 6px; height: 10px; overflow: hidden; width: 100%;">
+          <div id="updateProgressBar" style="background: #db6f4e; height: 100%; width: 0%; transition: width 0.1s ease;"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer" style="margin-top:20px; display:flex; gap:10px; justify-content:flex-end;">
+      <button class="button-secondary" id="cancelModalUpdate" style="background:transparent; border:1px solid rgba(255,255,255,0.15); color:white; padding:8px 16px; border-radius:8px; cursor:pointer;">Después</button>
+      <button class="button-main modal-save-btn" id="startUpdateBtn" style="background: #db6f4e; border:none; color:white; padding:8px 16px; border-radius:8px; cursor:pointer; font-weight:bold;">¡ACTUALIZAR AHORA!</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+<script src="rk_core.js"></script>
+<script src="rk_crop.js"></script>
+<script src="rk_components.js"></script>
+  <script src="rk_tutorial.js"></script>
+<script src="rk_planning_db.js"></script>
+<script src="index_projects.js"></script>
+<script src="reikanales.js"></script>
+</body>
+</html>

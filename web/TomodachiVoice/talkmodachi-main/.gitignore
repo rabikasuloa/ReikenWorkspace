@@ -1,0 +1,6 @@
+.wrangler
+node_modules
+*.cxi
+*.exe
+gamePatch/source/main.hks
+newcodeinfo.h

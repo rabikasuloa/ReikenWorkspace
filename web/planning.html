@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Planificador de Temporadas — Reiken Workspace</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="planning.css">
+</head>
+<body class="rk-dark-theme">
+  
+  <div class="planning-container">
+    <!-- Top Bar -->
+    <header class="planning-header">
+      <div class="header-left">
+        <button class="btn-back" id="btnBack">⟨ Volver al Proyecto</button>
+        <div class="season-info-header">
+          <h1 id="seasonTitleDisplay">Cargando Temporada...</h1>
+          <p id="seasonDescDisplay" class="season-desc"></p>
+        </div>
+      </div>
+      
+      <div class="header-actions">
+        <button class="btn-action btn-add" id="btnAddEpisode">🎬 Añadir Episodio</button>
+        <button class="btn-action btn-add" id="btnAddPlotline">📈 Añadir Trama</button>
+        <button class="btn-action btn-secondary" id="btnExport">Exportar 📤</button>
+        <button class="btn-action btn-secondary" id="btnImport">Importar 📥</button>
+        <input type="file" id="importFileInput" accept=".json" style="display:none">
+      </div>
+    </header>
+
+    <!-- Canvas Grid Area -->
+    <main class="planning-canvas" id="planningCanvas">
+      <table class="plot-grid" id="plotGrid">
+        <thead>
+          <tr id="gridHeaderRow">
+            <th class="corner-header">Tramas / Episodios</th>
+            <!-- Las cabeceras de episodios se renderizan aquí -->
+          </tr>
+        </thead>
+        <tbody id="gridBody">
+          <!-- Las filas de tramas y sus celdas se renderizan aquí -->
+        </tbody>
+      </table>
+    </main>
+  </div>
+
+  <!-- MODAL: EDITAR/CREAR TARJETA DE TRAMA -->
+  <div id="cardModal" class="modal-overlay hidden">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2 id="cardModalTitle">Editar Tarjeta de Trama</h2>
+        <button class="modal-close" id="closeCardModal">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group" style="margin-bottom:16px;">
+          <label for="cardTitle" style="display:block; margin-bottom:6px; color:rgba(255,255,255,0.7); font-size:0.9rem;">Título de la Escena</label>
+          <input type="text" id="cardTitle" class="modal-input" placeholder="ej. Encuentro en las ruinas...">
+        </div>
+        <div class="form-group" style="margin-bottom:16px;">
+          <label for="cardSummary" style="display:block; margin-bottom:6px; color:rgba(255,255,255,0.7); font-size:0.9rem;">Resumen / Notas Narrativas</label>
+          <textarea id="cardSummary" class="modal-textarea" rows="4" placeholder="Describe lo que sucede en esta intersección de tramas..."></textarea>
+        </div>
+        <div class="form-group" style="margin-bottom:16px;">
+          <label style="display:block; margin-bottom:6px; color:rgba(255,255,255,0.7); font-size:0.9rem;">Nivel de Tensión Dramática</label>
+          <div class="tension-selector" style="display:flex; gap:10px;">
+            <button class="tension-dot" data-val="1" title="Tensión Baja" style="background:none; border:none; font-size:1.5rem; cursor:pointer;">🟢</button>
+            <button class="tension-dot" data-val="2" title="Tensión Media-Baja" style="background:none; border:none; font-size:1.5rem; cursor:pointer;">🟡</button>
+            <button class="tension-dot" data-val="3" title="Tensión Media" style="background:none; border:none; font-size:1.5rem; cursor:pointer;">🟠</button>
+            <button class="tension-dot" data-val="4" title="Tensión Alta" style="background:none; border:none; font-size:1.5rem; cursor:pointer;">🔴</button>
+            <button class="tension-dot" data-val="5" title="Tensión Crítica" style="background:none; border:none; font-size:1.5rem; cursor:pointer;">🔥</button>
+          </div>
+          <input type="hidden" id="cardTension" value="1">
+        </div>
+        
+        <!-- Integración con Worldbuilding: Enlazar personajes -->
+        <div class="form-group" style="margin-bottom:16px;">
+          <label style="display:block; margin-bottom:6px; color:rgba(255,255,255,0.7); font-size:0.9rem;">Personajes / Elementos Involucrados</label>
+          <div class="character-selector-grid" id="characterSelectorGrid">
+            <!-- Cargado dinámicamente desde el worldbuilding -->
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer" style="justify-content: space-between; margin-top:20px;">
+        <button class="button-delete" id="btnDeleteCard">🗑 Eliminar Tarjeta</button>
+        <div style="display:flex; gap:10px">
+          <button class="button-secondary" id="btnCancelCard">Cancelar</button>
+          <button class="button-main modal-save-btn" id="btnSaveCard">¡HECHO!</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: CREAR/EDITAR EPISODIO -->
+  <div id="episodeModal" class="modal-overlay hidden">
+    <div class="modal-box modal-box-sm">
+      <div class="modal-header">
+        <h2 id="episodeModalTitle">Episodio</h2>
+        <button class="modal-close" id="closeEpisodeModal">✕</button>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:12px; margin-top:8px">
+        <input id="episodeNumber" type="number" class="modal-input" placeholder="Número del episodio...">
+        <input id="episodeTitle" type="text" class="modal-input" placeholder="Título del episodio (ej. El Despertar)...">
+      </div>
+      <div class="modal-footer" style="margin-top:16px; justify-content:space-between">
+        <button class="button-delete" id="btnDeleteEpisode">🗑 Eliminar</button>
+        <div style="display:flex; gap:10px; margin-left:auto;">
+          <button class="button-secondary" id="btnCancelEpisode">Cancelar</button>
+          <button class="button-main modal-save-btn" id="btnSaveEpisode">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: CREAR/EDITAR TRAMA -->
+  <div id="plotlineModal" class="modal-overlay hidden">
+    <div class="modal-box modal-box-sm">
+      <div class="modal-header">
+        <h2 id="plotlineModalTitle">Trama</h2>
+        <button class="modal-close" id="closePlotlineModal">✕</button>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:12px; margin-top:8px">
+        <input id="plotlineName" type="text" class="modal-input" placeholder="Nombre de la trama (ej. Trama Amorosa)...">
+        <div class="color-picker-group" style="margin-top:8px;">
+          <label style="display:block; margin-bottom:6px; color:rgba(255,255,255,0.7); font-size:0.85rem;">Color de la Trama:</label>
+          <div class="color-palette" id="colorPalette" style="display:flex; gap:8px;">
+            <button class="color-swatch active" data-color="#db6f4e" style="background:#db6f4e; width:28px; height:28px; border-radius:50%; border:2px solid transparent; cursor:pointer;"></button>
+            <button class="color-swatch" data-color="#9b5de5" style="background:#9b5de5; width:28px; height:28px; border-radius:50%; border:2px solid transparent; cursor:pointer;"></button>
+            <button class="color-swatch" data-color="#06d6a0" style="background:#06d6a0; width:28px; height:28px; border-radius:50%; border:2px solid transparent; cursor:pointer;"></button>
+            <button class="color-swatch" data-color="#118ab2" style="background:#118ab2; width:28px; height:28px; border-radius:50%; border:2px solid transparent; cursor:pointer;"></button>
+            <button class="color-swatch" data-color="#ffd166" style="background:#ffd166; width:28px; height:28px; border-radius:50%; border:2px solid transparent; cursor:pointer;"></button>
+            <button class="color-swatch" data-color="#ff006e" style="background:#ff006e; width:28px; height:28px; border-radius:50%; border:2px solid transparent; cursor:pointer;"></button>
+            <button class="color-swatch" data-color="#3a86c8" style="background:#3a86c8; width:28px; height:28px; border-radius:50%; border:2px solid transparent; cursor:pointer;"></button>
+          </div>
+          <input type="hidden" id="plotlineColor" value="#db6f4e">
+        </div>
+      </div>
+      <div class="modal-footer" style="margin-top:16px; justify-content:space-between">
+        <button class="button-delete" id="btnDeletePlotline">🗑 Eliminar</button>
+        <div style="display:flex; gap:10px; margin-left:auto;">
+          <button class="button-secondary" id="btnCancelPlotline">Cancelar</button>
+          <button class="button-main modal-save-btn" id="btnSavePlotline">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <script src="rk_core.js"></script>
+  <script src="rk_planning_db.js"></script>
+  <script src="planning.js"></script>
+</body>
+</html>
