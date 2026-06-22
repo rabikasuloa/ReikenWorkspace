@@ -4,15 +4,15 @@
   "pub_date": "2026-06-22T00:00:00Z",
   "platforms": {
     "windows-x86_64": {
-      "signature": "",
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVUM1YwaGtDV0JvMFljYzdsU1FQYmdBdmdoeGVtZ0RmTWNmcEQ3RjRHWnB5QWRWZmNTQUx4M1c0NW4yYnlCcGFXdEFzTmJ0c0M5Q1hhemFSWDZkNWdOalZSZXBmblE0NFFvPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzgyMTUwMDQ1CWZpbGU6UmVpa2VuIFdvcmtzcGFjZV8xLjMuMF94NjRfZW4tVVMubXNpCnB4bkE1azZvVWFHVC93SW1DSkhpUkpaVWRLdWhVNXFOVkFMa0RyV1MvOHdIZGs4QTdxZXUydjVEaW1vcEJUVzZtSE9WY25ERS90dEgvamtHRU04bkNnPT0K",
       "url": "https://github.com/rabikasuloa/ReikenWorkspace/releases/download/v1.3.0/Reiken.Workspace_1.3.0_x64_en-US.msi"
     },
     "darwin-x86_64": {
-      "signature": "",
-      "url": "https://github.com/rabikasuloa/ReikenWorkspace/releases/download/v1.3.0/Reiken.Workspace_1.3.0_x64.dmg"
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVUM1YwaGtDV0JvMFRRY3BjUEx3KzRIOUMrS0JucWdEMk5kREtteldjdGtBUksrK3lwdVM5Uld1bFQ2RjlUVmhaR0hCOFU2UU5zN0YzWVhPTW1YTkM1WmhDZTBQVUNzUVE4PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzgyMTQ5NzIyCWZpbGU6UmVpa2VuIFdvcmtzcGFjZV8xLjMuMF9hYXJjaDY0LmRtZwpIa3cyWVV4a0FCVys5UDEzNnBnQXQxM0oxYVVFUGM1TGhOYW5jaEl1bzBtTXk4RXoybDZMRDYyQ3FTL1Z3TStUaTdSMEIwVUZIMzhJcmpuc3h0NHhEdz09Cg==",
+      "url": "https://github.com/rabikasuloa/ReikenWorkspace/releases/download/v1.3.0/Reiken.Workspace_1.3.0_aarch64.dmg"
     },
     "darwin-aarch64": {
-      "signature": "",
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVUM1YwaGtDV0JvMFY1dkp6cDkyVC94WmpiT2p0ZTZsVDV4ODJxRG1xUjgvMXlnRWIzc2lSaVFVdjNGZXVsNERmakl5NnVTTzVJUUloVkR6d3E0cDFoYmJXSHJ5UHFVK1FVPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzgyMTQ5NzY2CWZpbGU6UmVpa2VuIFdvcmtzcGFjZV8xLjMuMF9hYXJjaDY0LmRtZwpmN1VrWVlvc3ZEVDd1Sk1xTVBFbDlpUG11K2tjZU15RFRwOVROZEIzVDhiZVlMQ0h0azNUYnNkN2VEZHM3TE8rOXBjdWpTVk51VGtueVhORnUvWTlCdz09Cg==",
       "url": "https://github.com/rabikasuloa/ReikenWorkspace/releases/download/v1.3.0/Reiken.Workspace_1.3.0_aarch64.dmg"
     }
   }
