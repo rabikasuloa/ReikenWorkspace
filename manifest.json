@@ -1,19 +1,19 @@
 {
-  "version": "1.2.0",
+  "version": "1.3.0",
   "notes": "Migración a Tauri v2. Sistema de animaciones global (ANIM), animaciones de entrada/salida en todos los modales, animación de flotado sutil en personalización.",
-  "pub_date": "2026-06-21T00:00:00Z",
+  "pub_date": "2026-06-22T00:00:00Z",
   "platforms": {
     "windows-x86_64": {
       "signature": "",
-      "url": "https://github.com/rabikasuloa/ReikenWorkspace/releases/download/v1.2.0/Reiken.Workspace_1.2.0_x64_en-US.msi"
+      "url": "https://github.com/rabikasuloa/ReikenWorkspace/releases/download/v1.3.0/Reiken.Workspace_1.3.0_x64_en-US.msi"
     },
     "darwin-x86_64": {
       "signature": "",
-      "url": "https://github.com/rabikasuloa/ReikenWorkspace/releases/download/v1.2.0/Reiken.Workspace_1.2.0_x64.dmg"
+      "url": "https://github.com/rabikasuloa/ReikenWorkspace/releases/download/v1.3.0/Reiken.Workspace_1.3.0_x64.dmg"
     },
     "darwin-aarch64": {
       "signature": "",
-      "url": "https://github.com/rabikasuloa/ReikenWorkspace/releases/download/v1.2.0/Reiken.Workspace_1.2.0_aarch64.dmg"
+      "url": "https://github.com/rabikasuloa/ReikenWorkspace/releases/download/v1.3.0/Reiken.Workspace_1.3.0_aarch64.dmg"
     }
   }
 }
