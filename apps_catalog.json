@@ -6,8 +6,9 @@
       "Arreglo de bugs",
       "Preview de los Atajos"
     ],
-    "currentVersion": "1.4.5",
+    "currentVersion": "1.4.6",
     "description": "Herramienta creada para el desarrollo organizado de proyectos. Especializada en la creacion de Storyboard y Worldbuilding.",
+    "downloadUrl": "https://github.com/rabikasuloa/ReikenWorkspace/releases/download/v1.4.6/1782255412186027200_Reiken.Workspace_1.3.0_x64_en-US.msi",
     "executable": "ReikenWorkspace.exe",
     "id": "reiken-workspace",
     "logo": "https://res.cloudinary.com/dyy6zbkop/image/upload/v1778264919/gvhbbn7lfcy99z3ewwh4.png",
