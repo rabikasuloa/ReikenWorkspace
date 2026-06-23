@@ -1,17 +1,16 @@
 [
   {
-    "id": "reiken-workspace",
-    "name": "Reiken Workspace",
-    "category": "Producción & Arte",
-    "currentVersion": "1.2.5",
-    "downloadUrl": "https://github.com/rabikasuloa/ReikenWorkspace/releases/download/v1.2.5/workspace.zip",
-    "executable": "ReikenWorkspace.exe",
     "banner": "https://res.cloudinary.com/dyy6zbkop/image/upload/v1778266397/znkkaf4m4ss1uquhuxvo.png",
-    "description": "Herramienta creada para el desarrollo organizado de proyectos. Especializada en la creacion de Storyboard y Worldbuilding.",
+    "category": "Producción & Arte",
     "changelog": [
       "Arreglo de bugs",
       "Preview de los Atajos"
     ],
-    "logo": "https://res.cloudinary.com/dyy6zbkop/image/upload/v1778264919/gvhbbn7lfcy99z3ewwh4.png"
+    "currentVersion": "1.4.5",
+    "description": "Herramienta creada para el desarrollo organizado de proyectos. Especializada en la creacion de Storyboard y Worldbuilding.",
+    "executable": "ReikenWorkspace.exe",
+    "id": "reiken-workspace",
+    "logo": "https://res.cloudinary.com/dyy6zbkop/image/upload/v1778264919/gvhbbn7lfcy99z3ewwh4.png",
+    "name": "Reiken Workspace"
   }
 ]
