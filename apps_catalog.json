@@ -3,12 +3,11 @@
     "banner": "https://res.cloudinary.com/dyy6zbkop/image/upload/v1778266397/znkkaf4m4ss1uquhuxvo.png",
     "category": "Producción & Arte",
     "changelog": [
-      "Arreglo de bugs",
-      "Preview de los Atajos"
+      "Migracion a Svelte"
     ],
-    "currentVersion": "1.5.0",
+    "currentVersion": "2.0",
     "description": "Herramienta creada para el desarrollo organizado de proyectos. Especializada en la creacion de Storyboard y Worldbuilding.",
-    "downloadUrl": "https://github.com/rabikasuloa/ReikenWorkspace/releases/download/v1.5.0/1782872042288794000_Reiken.Workspace.zip",
+    "downloadUrl": "https://github.com/rabikasuloa/ReikenWorkspace/releases/download/v2.0/1786056896853290700_ReikenWorkspace.zip",
     "executable": "ReikenWorkspace.exe",
     "id": "reiken-workspace",
     "logo": "https://res.cloudinary.com/dyy6zbkop/image/upload/v1778264919/gvhbbn7lfcy99z3ewwh4.png",
