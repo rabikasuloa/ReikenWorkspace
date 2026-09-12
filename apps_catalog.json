@@ -3,11 +3,11 @@
     "banner": "https://res.cloudinary.com/dyy6zbkop/image/upload/v1778266397/znkkaf4m4ss1uquhuxvo.png",
     "category": "Producción & Arte",
     "changelog": [
-      "Migracion a Svelte: Ahora es personal"
+      "Migracion a Svelte: Mas Svelte que nunca"
     ],
-    "currentVersion": "2.4",
+    "currentVersion": "2.5",
     "description": "Herramienta creada para el desarrollo organizado de proyectos. Especializada en la creacion de Storyboard y Worldbuilding.",
-    "downloadUrl": "https://github.com/rabikasuloa/ReikenWorkspace/releases/download/v2.4/1789253782950752600_reikenworkspace-build.zip",
+    "downloadUrl": "https://github.com/rabikasuloa/ReikenWorkspace/releases/download/v2.5/1789254789976847400_ReikenWorkspace-desktop-build.zip",
     "executable": "ReikenWorkspace.exe",
     "id": "reiken-workspace",
     "logo": "https://res.cloudinary.com/dyy6zbkop/image/upload/v1778264919/gvhbbn7lfcy99z3ewwh4.png",
